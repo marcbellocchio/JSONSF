@@ -28,7 +28,7 @@ public class JSONSF_main {
     "| Command Line: dnssd <option> [parameters]                                  |\n" +
     "------------------------------------------------------------------------------\n" +
     "dnssd -E <algo> <key> <IV> <plain>											   \n" +
-    "dnssd -F                             (Enumerate recommended browsing domains)\n" +
+    "dnssd -D <algo> <key> <IV> <ciphered>											   \n" +
     "dnssd -B        <Type> [<Domain>]             (Browse for services instances)\n" +
     "dnssd -L <Name> <Type> [<Domain>]                (Look up a service instance)\n" +
     "dnssd -R <Name> <Type> <Domain> <Port> <Host> [<TXT>...] (Register a service)\n" +
@@ -83,11 +83,13 @@ public class JSONSF_main {
 	                            ExecutionTimer._start();
 
 	                            System.out.println("Encryption is starting");
+	                            // args[1] contains algo 
 	                            if ((args.length < 5) || (args[1] == null) || (args[1].length() == 0))
 	                            {
 	                                throw new IllegalArgumentException("jsonsecurefile Too few arguments for -E option");
 	                            }
 	                            else{
+	                            	// i.e twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
 	                            	switch (args[1].toLowerCase()){
 	                            	
 	                            		case Constants.TWOFISH:
@@ -106,6 +108,39 @@ public class JSONSF_main {
 	                            }// end else
 	                            System.out.println("\n" + timingBuilder.toString() + " - took " + ExecutionTimer._took(TimeUnit.SECONDS) + " seconds.");                            
 	                            break;	
+	                            
+		                        // decrypt
+		                        case "-D":
+		                        case "--D":	                        	
+		                            // start timer
+		                            ExecutionTimer._start();
+
+		                            System.out.println("Decryption is starting");
+		                            // args[1] contains algo 
+		                            if ((args.length < 5) || (args[1] == null) || (args[1].length() == 0))
+		                            {
+		                                throw new IllegalArgumentException("jsonsecurefile Too few arguments for -D option");
+		                            }
+		                            else{
+		                            	// i.e twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
+		                            	switch (args[1].toLowerCase()){
+		                            	
+		                            		case Constants.TWOFISH:
+		    	                        		byte[] result = null;
+		                            			
+		    	                        		JSONSF_CryptoDecipher Decipher = new JSONSF_CryptoDecipher ();
+		    	                        		
+		    	                        		result = Decipher.TwoFishCBC(args[2].toLowerCase().getBytes(), args[3].toLowerCase().getBytes(), args[4].toLowerCase().getBytes());
+		    	                        		System.out.println("\n" + " Decryption result is " + result.toString());
+		    	                        		break;
+		                            		default:
+		                            			throw new IllegalArgumentException("jsonsecurefile algo not supported for -D option" + args[1] );
+		                          	
+		                            	
+		                            	}// end switch (args[1].toLowerCase()){                            	
+		                            }// end else
+		                            System.out.println("\n" + timingBuilder.toString() + " - took " + ExecutionTimer._took(TimeUnit.SECONDS) + " seconds.");                            
+		                            break;
 						case "-B":
 	                            // Browse for service instances
 	                            if ((args.length < 2) || (args[1] == null) || (args[1].length() == 0))
