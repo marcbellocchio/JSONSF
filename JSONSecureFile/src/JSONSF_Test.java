@@ -1,6 +1,7 @@
 
 import java.io.*;
-
+import JSONSFCRYPTO.*;
+import JSONSFFILE.*;
 /**
  * @author mbl
  * basic test
@@ -54,29 +55,29 @@ public class JSONSF_Test {
 		byte[] firesult = null;
 		String reference = "Un sot savant est sot plus qu’un sot ignorant Jean-Baptiste Poquelin, dit Molière Les Femmes savantes";
 		byte[] plaindata = reference.getBytes();
-		String referenceHex = JSONSF_CryptoCipher.encodeHex(plaindata);
+		String referenceHex = JSONSF_CryptoCipher_TwoFishCBC.encodeHex(plaindata);
 		
 		System.out.print("referenceHex 		is " + referenceHex + "\n");
 		System.out.print("referenceHex lg 	is " + referenceHex.length() + "\n");
 		
-		JSONSF_CryptoCipher Cipher = new JSONSF_CryptoCipher();
-		JSONSF_CryptoDecipher Decipher = new JSONSF_CryptoDecipher ();
+		JSONSF_CryptoCipher_TwoFishCBC Cipher = new JSONSF_CryptoCipher_TwoFishCBC();
+		JSONSF_CryptoDecipher_TwoFishCBC Decipher = new JSONSF_CryptoDecipher_TwoFishCBC ();
 		
-		iv = JSONSF_CryptoCipher.decodeHex("3dafba429d9eb430b422da802c9fac41");
-		key = JSONSF_CryptoCipher.decodeHex("c286696d887c9aa0611bbb3e2025a45a");
+		iv = JSONSF_CryptoCipher_TwoFishCBC.decodeHex("3dafba429d9eb430b422da802c9fac41");
+		key = JSONSF_CryptoCipher_TwoFishCBC.decodeHex("c286696d887c9aa0611bbb3e2025a45a");
 		
 		result = Cipher.TwoFishCBC(key, iv, plaindata);
 		
-		System.out.print("enc result 		is " + JSONSF_CryptoCipher.encodeHex(result) + "\n");
-		System.out.print("enc result lg 	is " + JSONSF_CryptoCipher.encodeHex(result).length() + "\n");
+		System.out.print("enc result 		is " + JSONSF_CryptoCipher_TwoFishCBC.encodeHex(result) + "\n");
+		System.out.print("enc result lg 	is " + JSONSF_CryptoCipher_TwoFishCBC.encodeHex(result).length() + "\n");
 		
 		firesult = Decipher.TwoFishCBC(key, iv, result);
 		
-		System.out.print("firesult 			is " + JSONSF_CryptoCipher.encodeHex(firesult)+ "\n");
-		System.out.print("firesult 	lg		is " + JSONSF_CryptoCipher.encodeHex(firesult).length() + "\n");
+		System.out.print("firesult 			is " + JSONSF_CryptoCipher_TwoFishCBC.encodeHex(firesult)+ "\n");
+		System.out.print("firesult 	lg		is " + JSONSF_CryptoCipher_TwoFishCBC.encodeHex(firesult).length() + "\n");
 		
 		
-		testres = JSONSF_CryptoCipher.encodeHex(firesult).toString().compareTo(referenceHex);
+		testres = JSONSF_CryptoCipher_TwoFishCBC.encodeHex(firesult).toString().compareTo(referenceHex);
 		
 		
 		return testres; 
@@ -118,7 +119,7 @@ firesult 	lg		is 208
 		String strReferenceHASH = "kQXKqMepf9KYj8FAkr0s4Z43POCOQ7WM4CtVQAjCxD0Wyz2VK9wf5VjPsL6/qpfTCBheKFMRwlmxDC1RXogPjg==" ; 
 		byte[]  result ;
 		
-		JSONSF_CryptoHash hashclass = new JSONSF_CryptoHash();
+		JSONSF_CryptoWhirlpoolHash hashclass = new JSONSF_CryptoWhirlpoolHash();
 		
 		result = hashclass.getWhirlpoolHash (strReference.getBytes());
 		
@@ -136,7 +137,7 @@ firesult 	lg		is 208
 		String strReferenceHASH = "AA4RYMuzTUYr++rq2/pXBqEmxxO/M5RtMNciLu5qotHvDi6HdikX9Mvnv7s8KYkyhMjquBxlZGhia+MMCBLoRQ==" ; 
 		String result ;
 		
-		JSONSF_CryptoHash hashclass = new JSONSF_CryptoHash();
+		JSONSF_CryptoSha512Hash hashclass = new JSONSF_CryptoSha512Hash();
 		
 		result = hashclass.Hash_Sha512 (strReference);
 		

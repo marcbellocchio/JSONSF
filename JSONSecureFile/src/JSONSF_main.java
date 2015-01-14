@@ -9,6 +9,7 @@
 
 
 import java.io.IOException;
+import JSONSFCRYPTO.*;
 import java.io.UnsupportedEncodingException;
 //import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,7 +17,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import org.json.simple.parser.ParseException;
-
+import JSONSFGLOBAL.Constants ;
 
 public class JSONSF_main {
 
@@ -60,10 +61,7 @@ public class JSONSF_main {
 	                timingBuilder.append("\"");
 	                
 	                String temp = args[0];
-	                
-	                
-	                
-	                
+	                	                	              
 	                if ((temp != null) && ((temp.length() == 2) || (temp.length() == 3)) &&
 	                (temp.startsWith("-") || temp.startsWith("--")))
 	                {
@@ -101,7 +99,7 @@ public class JSONSF_main {
 	                            		case Constants.TWOFISH:
 	    	                        		byte[] result = null;
 	    	                        		
-	    	                        		JSONSF_CryptoCipher Cipher = new JSONSF_CryptoCipher();
+	    	                        		JSONSF_CryptoCipher_TwoFishCBC Cipher = new JSONSF_CryptoCipher_TwoFishCBC();
 	    	                        		System.out.println("\n" + " string to encrypt is   " + result );
 	    	                        		result = Cipher.TwoFishCBC(JSONSF_Crypto.decodeHex (args[2]), JSONSF_Crypto.decodeHex (args[3]), args[4].getBytes());
 	    	                        		//System.out.println("\n" + " Encryption result is " + JSONSF_Crypto.encodeHex(result) );
@@ -143,7 +141,7 @@ public class JSONSF_main {
 		                            		case Constants.TWOFISH:
 		    	                        		byte[] result = null;
 		                            			
-		    	                        		JSONSF_CryptoDecipher Decipher = new JSONSF_CryptoDecipher ();
+		    	                        		JSONSF_CryptoDecipher_TwoFishCBC Decipher = new JSONSF_CryptoDecipher_TwoFishCBC ();
 		    	                        		
 		    	                        		result = Decipher.TwoFishCBC(JSONSF_Crypto.decodeHex (args[2]), JSONSF_Crypto.decodeHex (args[3]), JSONSF_Crypto.decodeHex (args[4]));
 		    	                        		System.out.println("\n" + " Decryption result is " + new String (result));

@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="lib/javax-crypto.jar"/>
 	<classpathentry kind="lib" path="lib/javax-security.jar"/>
 	<classpathentry kind="lib" path="lib/bcprov-ext-jdk15on-151.jar" sourcepath="/home/mbl/Downloads/src.zip"/>
-	<classpathentry kind="lib" path="/home/mbl/git/JSONSecureFile/lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
