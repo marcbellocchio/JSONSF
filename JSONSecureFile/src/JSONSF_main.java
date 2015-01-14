@@ -9,6 +9,7 @@
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 //import java.net.InetAddress;
 import java.net.UnknownHostException;
 //import java.util.ArrayList;
@@ -25,10 +26,10 @@ public class JSONSF_main {
 	//private static final String SDTVWCAM_TCP_LOCAL = "_sdtvwcam._tcp.local.";
 	private static final String COMMAND_LINE =
     "------------------------------------------------------------------------------\n" +
-    "| Command Line: dnssd <option> [parameters]                                  |\n" +
+    "| Command Line:  <option> [parameters]                                  |\n" +
     "------------------------------------------------------------------------------\n" +
-    "dnssd -E <algo> <key> <IV> <plain>											   \n" +
-    "dnssd -D <algo> <key> <IV> <ciphered>											   \n" +
+    "dnssd -E <algo> <key as hex string> <IV as hex string> <plain text as string>											   \n" +
+    "dnssd -D <algo> <key as hex string> <IV as hex string> <ciphered byte buffer>											   \n" +
     "dnssd -B        <Type> [<Domain>]             (Browse for services instances)\n" +
     "dnssd -L <Name> <Type> [<Domain>]                (Look up a service instance)\n" +
     "dnssd -R <Name> <Type> <Domain> <Port> <Host> [<TXT>...] (Register a service)\n" +
@@ -41,8 +42,6 @@ public class JSONSF_main {
     throws UnknownHostException
     {
     }
-    
-	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -84,21 +83,31 @@ public class JSONSF_main {
 
 	                            System.out.println("Encryption is starting");
 	                            // args[1] contains algo 
-	                            if ((args.length < 5) || (args[1] == null) || (args[1].length() == 0))
+
+	                            if ((args.length < 5 ) || (args[1] == null) || (args[1].length() == 0))
+
 	                            {
 	                                throw new IllegalArgumentException("jsonsecurefile Too few arguments for -E option");
 	                            }
 	                            else{
 	                            	// i.e twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
+
+	                            	
+	                            	// result is :
+	                            	// 1952b9f726d39a1c74ea939244ad0bb633cba7d8f3924e2fc44355f993b8e69382a1a81a8b504350ee5ffdf5a754d2418cf1d1158b6526f211b3281678277a2185b756d933d338927d2024eabd6a3314
+
 	                            	switch (args[1].toLowerCase()){
 	                            	
 	                            		case Constants.TWOFISH:
 	    	                        		byte[] result = null;
-	                            			
-	    	                        		JSONSF_CryptoCipher Cipher = new JSONSF_CryptoCipher();
 	    	                        		
-	    	                        		result = Cipher.TwoFishCBC(args[2].toLowerCase().getBytes(), args[3].toLowerCase().getBytes(), args[4].toLowerCase().getBytes());
-	    	                        		System.out.println("\n" + " Encryption result is " + result.toString());
+	    	                        		JSONSF_CryptoCipher Cipher = new JSONSF_CryptoCipher();
+	    	                        		System.out.println("\n" + " string to encrypt is   " + result );
+	    	                        		result = Cipher.TwoFishCBC(JSONSF_Crypto.decodeHex (args[2]), JSONSF_Crypto.decodeHex (args[3]), args[4].getBytes());
+	    	                        		//System.out.println("\n" + " Encryption result is " + JSONSF_Crypto.encodeHex(result) );
+
+	    	                        		System.out.println("\n" + " Encryption result is " + JSONSF_Crypto.encodeHex (result) );
+	    	                        		
 	    	                        		break;
 	                            		default:
 	                            			throw new IllegalArgumentException("jsonsecurefile algo not supported for -E option" + args[1] );
@@ -122,7 +131,13 @@ public class JSONSF_main {
 		                                throw new IllegalArgumentException("jsonsecurefile Too few arguments for -D option");
 		                            }
 		                            else{
-		                            	// i.e twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
+
+		                            	// i.e -E twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
+		                            	// encrypted result is 
+		                            	// -D twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a 1952b9f726d39a1c74ea939244ad0bb633cba7d8f3924e2fc44355f993b8e69382a1a81a8b504350ee5ffdf5a754d2418cf1d1158b6526f211b3281678277a2185b756d933d338927d2024eabd6a3314
+		                            	// decryption shall be "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
+		                            	
+		                            	
 		                            	switch (args[1].toLowerCase()){
 		                            	
 		                            		case Constants.TWOFISH:
@@ -130,8 +145,9 @@ public class JSONSF_main {
 		                            			
 		    	                        		JSONSF_CryptoDecipher Decipher = new JSONSF_CryptoDecipher ();
 		    	                        		
-		    	                        		result = Decipher.TwoFishCBC(args[2].toLowerCase().getBytes(), args[3].toLowerCase().getBytes(), args[4].toLowerCase().getBytes());
-		    	                        		System.out.println("\n" + " Decryption result is " + result.toString());
+		    	                        		result = Decipher.TwoFishCBC(JSONSF_Crypto.decodeHex (args[2]), JSONSF_Crypto.decodeHex (args[3]), JSONSF_Crypto.decodeHex (args[4]));
+		    	                        		System.out.println("\n" + " Decryption result is " + new String (result));
+
 		    	                        		break;
 		                            		default:
 		                            			throw new IllegalArgumentException("jsonsecurefile algo not supported for -D option" + args[1] );
