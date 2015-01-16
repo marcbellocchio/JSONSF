@@ -20,6 +20,9 @@ import java.io.*;
 
 public class JSONSF_Crypto {
 	
+	// block size for cipher are in bytes 
+	public static final int BitBlock128Bit = 16;
+	public static final int BitBlock256Bit = 32;
 	
 	public JSONSF_Crypto(){
 		

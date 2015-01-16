@@ -44,12 +44,12 @@ public class JSONSF_CryptoDecipher_TwoFishCBC extends JSONSF_Crypto{
 		byte [] finalplainOut = null ;
 		
         IPad padding = PadFactory.getInstance("PKCS7");
-        padding.init(16);
-		IMode mode = ModeFactory.getInstance("CBC","Twofish", 16);
+        padding.init(BitBlock128Bit);
+		IMode mode = ModeFactory.getInstance("CBC","Twofish", BitBlock128Bit);
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		// These attributes are defined in gnu.crypto.cipher.IBlockCipher.
 		attributes.put(IMode.KEY_MATERIAL, key_bytes);
-		attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(16));
+		attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(BitBlock128Bit));
 		// These attributes are defined in IMode.
 		attributes.put(IMode.STATE, new Integer(IMode.DECRYPTION));
 		attributes.put(IMode.IV, iv_bytes);

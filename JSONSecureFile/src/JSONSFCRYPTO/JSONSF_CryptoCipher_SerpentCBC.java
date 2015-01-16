@@ -9,18 +9,18 @@ import java.security.InvalidKeyException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JSONSF_CryptoCipher_TwoFishCBC extends JSONSF_Crypto {
+public class JSONSF_CryptoCipher_SerpentCBC extends JSONSF_Crypto{
 
-	public JSONSF_CryptoCipher_TwoFishCBC() {
+	public JSONSF_CryptoCipher_SerpentCBC() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * TwoFish version of a byte buffer
+	 * Serpent version of a byte buffer
 	 * return a byte buffer 
 	 */
     /**
-    * TwoFish CBC 
+    * Serpent CBC 
     * <p>
     * gnu crypto java lib used
     * block size 128 bit, key size 128, 192, 256
@@ -28,7 +28,7 @@ public class JSONSF_CryptoCipher_TwoFishCBC extends JSONSF_Crypto {
     *            key, IV and plain data are byte buffer
     * @return encrypted byte buffer pad is PKCS7
     */
-	public byte [] TwoFishCBC( byte [] key_bytes, byte [] iv_bytes, byte [] plainIn ){
+	public byte [] SerpentCBC( byte [] key_bytes, byte [] iv_bytes, byte [] plainIn ){
 	
 		byte [] cipherOut = null ;
 		
@@ -49,7 +49,7 @@ public class JSONSF_CryptoCipher_TwoFishCBC extends JSONSF_Crypto {
             System.arraycopy(pad, 0, finalplain, pt1.length, pad.length);
         }
         
-		IMode mode = ModeFactory.getInstance("CBC","Twofish", BitBlock128Bit);
+		IMode mode = ModeFactory.getInstance("CBC","Serpent", BitBlock128Bit);
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		// These attributes are defined in gnu.crypto.cipher.IBlockCipher.
 		attributes.put(IMode.KEY_MATERIAL, key_bytes);
@@ -73,9 +73,5 @@ public class JSONSF_CryptoCipher_TwoFishCBC extends JSONSF_Crypto {
 		return cipherOut;
 
 	}
-	
-
-
-	
 	
 }
