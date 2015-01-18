@@ -1,5 +1,7 @@
 /**
  * main class to start code from command line
+   remote git
+   https://github.com/marcbellocchio/JSONSF
  */
 
 /**
@@ -96,16 +98,11 @@ public class JSONSF_main {
 
 	                            	switch (args[1].toLowerCase()){
 	                            	
-	                            		case Constants.TWOFISH:
-	    	                        		byte[] result = null;
+	                            		case Constants.TWOFISHCBC:
+	    	                        		//byte[] result = null;
 	    	                        		
-	    	                        		JSONSF_CryptoCipher_TwoFishCBC Cipher = new JSONSF_CryptoCipher_TwoFishCBC();
-	    	                        		System.out.println("\n" + " string to encrypt is   " + result );
-	    	                        		result = Cipher.TwoFishCBC(JSONSF_Crypto.decodeHex (args[2]), JSONSF_Crypto.decodeHex (args[3]), args[4].getBytes());
-	    	                        		//System.out.println("\n" + " Encryption result is " + JSONSF_Crypto.encodeHex(result) );
-
-	    	                        		System.out.println("\n" + " Encryption result is " + JSONSF_Crypto.encodeHex (result) );
-	    	                        		
+	    	                        		JSONSF_CryptoCipher_TwoFishCBC Cipher = new JSONSF_CryptoCipher_TwoFishCBC();   	                        		
+	    	                        		System.out.println("\n" + " Encryption result is " + Cipher.TwoFishCBC(args[2], args[3], args[4]));
 	    	                        		break;
 	                            		default:
 	                            			throw new IllegalArgumentException("jsonsecurefile algo not supported for -E option" + args[1] );
@@ -138,13 +135,13 @@ public class JSONSF_main {
 		                            	
 		                            	switch (args[1].toLowerCase()){
 		                            	
-		                            		case Constants.TWOFISH:
-		    	                        		byte[] result = null;
+		                            		case Constants.TWOFISHCBC:
+		    	                        		//byte[] result = null;
 		                            			
 		    	                        		JSONSF_CryptoDecipher_TwoFishCBC Decipher = new JSONSF_CryptoDecipher_TwoFishCBC ();
 		    	                        		
-		    	                        		result = Decipher.TwoFishCBC(JSONSF_Crypto.decodeHex (args[2]), JSONSF_Crypto.decodeHex (args[3]), JSONSF_Crypto.decodeHex (args[4]));
-		    	                        		System.out.println("\n" + " Decryption result is " + new String (result));
+		    	                        		//result = Decipher.TwoFishCBC(JSONSF_Crypto.decodeHex (args[2]), JSONSF_Crypto.decodeHex (args[3]), JSONSF_Crypto.decodeHex (args[4]));
+		    	                        		System.out.println("\n" + " Decryption result is " + Decipher.TwoFishCBC(args[2], args[3], args[4]));
 
 		    	                        		break;
 		                            		default:

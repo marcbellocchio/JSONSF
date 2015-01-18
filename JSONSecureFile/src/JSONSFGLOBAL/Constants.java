@@ -35,7 +35,9 @@ public interface Constants
     
 	/** ### CRYPTO Constants ### */	    
     /**  */
-    public static final String TWOFISH = "twofish";
+    public static final String TWOFISHCBC = "twofishcbc";
+    
+    public static final String SERPENTCBC = "serpentcbc";
 
 }
 
