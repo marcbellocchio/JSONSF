@@ -98,25 +98,13 @@ public class JSONSF_CryptoDecipher_TwoFishCBC extends JSONSF_Crypto{
     */
 	public String TwoFishCBC( String key_hexencoded, String iv_hexencoded, String cipherInhexencoded ){
 	
-		byte [] cipherOut = null ;
+		byte [] plainOut = null ; 
+		byte [] finalplainOut = null ;
+		byte [] CipheredData = null;
+
 		
         IPad padding = PadFactory.getInstance("PKCS7");
         padding.init(BitBlock128Bit);
-        byte[] pt1 = decodeHex (cipherInhexencoded);
-        byte[] pad = padding.pad(pt1, 0, pt1.length);
-        byte[] finalplain = null;
-        // 
-        if (pad.length == BitBlock128Bit) {
-        	// one block no pad
-        	finalplain = new byte[pt1.length];
-            System.arraycopy(pt1, 0, finalplain, 0, pt1.length);
-        } else { 
-        	// pad input buffer final buffer to encrypt is 
-        	finalplain = new byte[pt1.length + pad.length];
-            System.arraycopy(pt1, 0, finalplain, 0, pt1.length);
-            System.arraycopy(pad, 0, finalplain, pt1.length, pad.length);
-        }
-        
 		IMode mode = ModeFactory.getInstance("CBC","Twofish", BitBlock128Bit);
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		// These attributes are defined in gnu.crypto.cipher.IBlockCipher.
@@ -132,13 +120,25 @@ public class JSONSF_CryptoDecipher_TwoFishCBC extends JSONSF_Crypto{
 			e.printStackTrace();
 		}
 		int bs = mode.currentBlockSize();
-		cipherOut = new byte[finalplain.length ];
+		CipheredData = decodeHex(cipherInhexencoded);
+		plainOut = new byte[CipheredData.length];
 		// note that the doc from gnu crypto is wrong for the loop count
-		for (int i = 0; i +bs  <= finalplain.length; i += bs){
-			mode.update(finalplain, i, cipherOut, i);
+		for (int i = 0; i +bs <= CipheredData.length; i += bs){
+			mode.update(CipheredData, i, plainOut, i);
 		}
+		// now is time to unpad
+        try {
+            int unpad = padding.unpad(plainOut, 0, plainOut.length);
+            finalplainOut = new byte[plainOut.length - unpad];
+            System.arraycopy(plainOut, 0, finalplainOut, 0, finalplainOut.length);
+    		
+        } catch (Exception e) {
+        	finalplainOut = new byte[plainOut.length];
+            System.arraycopy(plainOut, 0, finalplainOut, 0, finalplainOut.length);
+        }
 		
-		return new String (cipherOut);
+		
+		return new String(finalplainOut);
 
 	}	
 	

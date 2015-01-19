@@ -90,7 +90,7 @@ public class JSONSF_main {
 	                                throw new IllegalArgumentException("jsonsecurefile Too few arguments for -E option");
 	                            }
 	                            else{
-	                            	// i.e twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
+	                            	// i.e -E twofishcbc 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
 
 	                            	
 	                            	// result is :
@@ -102,7 +102,7 @@ public class JSONSF_main {
 	    	                        		//byte[] result = null;
 	    	                        		
 	    	                        		JSONSF_CryptoCipher_TwoFishCBC Cipher = new JSONSF_CryptoCipher_TwoFishCBC();   	                        		
-	    	                        		System.out.println("\n" + " Encryption result is " + Cipher.TwoFishCBC(args[2], args[3], args[4]));
+	    	                        		System.out.println("\n" + " Encryption result is ==> \n" + Cipher.TwoFishCBC(args[2], args[3], args[4]) + "\n <==");
 	    	                        		break;
 	                            		default:
 	                            			throw new IllegalArgumentException("jsonsecurefile algo not supported for -E option" + args[1] );
@@ -129,7 +129,7 @@ public class JSONSF_main {
 
 		                            	// i.e -E twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
 		                            	// encrypted result is 
-		                            	// -D twofish 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a 1952b9f726d39a1c74ea939244ad0bb633cba7d8f3924e2fc44355f993b8e69382a1a81a8b504350ee5ffdf5a754d2418cf1d1158b6526f211b3281678277a2185b756d933d338927d2024eabd6a3314
+		                            	// -D twofishcbc 3dafba429d9eb430b422da802c9fac41 c286696d887c9aa0611bbb3e2025a45a 1952b9f726d39a1c74ea939244ad0bb633cba7d8f3924e2fc44355f993b8e69382a1a81a8b504350ee5ffdf5a754d2418cf1d1158b6526f211b3281678277a2185b756d933d338927d2024eabd6a3314
 		                            	// decryption shall be "Calmer un visage qui pleure n'est pas plus facile que d'y redonner le sourire."
 		                            	
 		                            	
@@ -141,11 +141,11 @@ public class JSONSF_main {
 		    	                        		JSONSF_CryptoDecipher_TwoFishCBC Decipher = new JSONSF_CryptoDecipher_TwoFishCBC ();
 		    	                        		
 		    	                        		//result = Decipher.TwoFishCBC(JSONSF_Crypto.decodeHex (args[2]), JSONSF_Crypto.decodeHex (args[3]), JSONSF_Crypto.decodeHex (args[4]));
-		    	                        		System.out.println("\n" + " Decryption result is " + Decipher.TwoFishCBC(args[2], args[3], args[4]));
+		    	                        		System.out.println("\n" + " Decryption result is ==> \n" + Decipher.TwoFishCBC(args[2], args[3], args[4]) + "\n <==" );
 
 		    	                        		break;
 		                            		default:
-		                            			throw new IllegalArgumentException("jsonsecurefile algo not supported for -D option" + args[1] );
+		                            			throw new IllegalArgumentException("jsonsecurefile algo not supported for -D option " + args[1] );
 		                          	
 		                            	
 		                            	}// end switch (args[1].toLowerCase()){                            	
