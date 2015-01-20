@@ -9,7 +9,7 @@ import java.security.InvalidKeyException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JSONSF_CryptoCipher_SerpentCBC extends JSONSF_Crypto{
+public class JSONSF_CryptoCipher_SerpentCBC extends JSONSF_CryptoCipher_TwoFishCBC{
 
 	public JSONSF_CryptoCipher_SerpentCBC() {
 		// TODO Auto-generated constructor stub

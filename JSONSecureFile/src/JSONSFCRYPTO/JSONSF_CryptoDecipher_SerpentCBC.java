@@ -16,7 +16,7 @@ import java.util.Map;
  * @author mbl
  *
  */
-public class JSONSF_CryptoDecipher_SerpentCBC extends JSONSF_Crypto{
+public class JSONSF_CryptoDecipher_SerpentCBC extends JSONSF_CryptoDecipher_TwoFishCBC{
 
 	/**
 	 * 

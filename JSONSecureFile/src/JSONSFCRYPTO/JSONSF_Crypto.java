@@ -24,9 +24,56 @@ public class JSONSF_Crypto {
 	public static final int BitBlock128Bit = 16;
 	public static final int BitBlock256Bit = 32;
 	
+    public static final String SIZE_ERROR = "size is 128 or 192 or 256 bit";
+    public static final String UNKNOWNTYPE = "unknown type";
+    public static final String NULL = "null";    
+    
+    public static final String IV = "IV";
+    public static final String KEY = "KEY";
+    public static final String DATA = "DATA";
+	
 	public JSONSF_Crypto(){
 		
 	}
+	
+	/**
+	 * check if param is not null and if length is ok
+	 * @param String type, bytes inparam
+	 *         type can be IV, KEY, DATA
+     *            
+     * @return 1 when ok, 0 on error
+	 */
+	public boolean IsParamValid ( String Type, byte [] inparam) {
+		
+		boolean valid=false; 
+
+		
+		switch (Type){
+			case IV:
+				if (inparam == null)
+					throw new IllegalArgumentException(IV + "is" + NULL);
+				if (inparam.length < BitBlock128Bit){
+					throw new IllegalArgumentException(IV + "shall have a" + SIZE_ERROR);
+				}
+				valid=true;				
+				break;
+
+			case KEY:
+				
+				break;
+				
+			case DATA:
+				
+				break;
+				
+			default:
+				throw new IllegalArgumentException(UNKNOWNTYPE);				
+		}
+
+		return valid;
+		
+	}
+	
 	/**
 	 * Base64Encode a string and return a string
 	 */
