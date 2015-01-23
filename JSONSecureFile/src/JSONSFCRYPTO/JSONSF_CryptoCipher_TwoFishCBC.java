@@ -31,11 +31,12 @@ public class JSONSF_CryptoCipher_TwoFishCBC extends JSONSF_Crypto {
 	public byte [] TwoFishCBC( byte [] key_bytes, byte [] iv_bytes, byte [] plainIn ){
 	
 		byte [] cipherOut = null ;
+		boolean IsAllParamValid=false;
 		
-		if ( (key_bytes.length < BitBlock128Bit) || (iv_bytes.length < BitBlock128Bit) ){
-			throw new IllegalArgumentException(KEY_IV_SIZE_ERROR);
-		}
-		else{			
+		// check inputs, exception throws
+		IsAllParamValid = ( IsParamValid(KEY, key_bytes) && IsParamValid(IV, iv_bytes) && IsParamValid(DATA, plainIn) );
+		
+		if (IsAllParamValid == true){			
 		
 	        IPad padding = PadFactory.getInstance("PKCS7");
 	        padding.init(BitBlock128Bit);
@@ -74,7 +75,7 @@ public class JSONSF_CryptoCipher_TwoFishCBC extends JSONSF_Crypto {
 			for (int i = 0; i +bs  <= finalplain.length; i += bs){
 				mode.update(finalplain, i, cipherOut, i);
 			}
-		}// end else
+		}// end if
 		
 		return cipherOut;
 
@@ -94,53 +95,16 @@ public class JSONSF_CryptoCipher_TwoFishCBC extends JSONSF_Crypto {
     *            key and IV shall be hex encoded i.e
     *            3dafba429d9eb430b422da802c9fac41
     *            plain in is a string like "this is my bottle of wine"
-    * @return encrypted byte buffer pad is PKCS7
+    * @return encrypted string or "" when error
     */
 	public String TwoFishCBC( String key_hexencoded, String iv_hexencoded, String plainIn ){
-	
-		byte [] cipherOut = null ;
-		
-        IPad padding = PadFactory.getInstance("PKCS7");
-        padding.init(BitBlock128Bit);
-        byte[] pt1 = plainIn.getBytes();
-        byte[] pad = padding.pad(pt1, 0, pt1.length);
-        byte[] finalplain = null;
-        // 
-        if (pad.length == BitBlock128Bit) {
-        	// one block no pad
-        	finalplain = new byte[pt1.length];
-            System.arraycopy(pt1, 0, finalplain, 0, pt1.length);
-        } else { 
-        	// pad input buffer final buffer to encrypt is 
-        	finalplain = new byte[pt1.length + pad.length];
-            System.arraycopy(pt1, 0, finalplain, 0, pt1.length);
-            System.arraycopy(pad, 0, finalplain, pt1.length, pad.length);
-        }
-        
-		IMode mode = ModeFactory.getInstance("CBC","Twofish", BitBlock128Bit);
-		Map<String, Object> attributes = new HashMap<String, Object>();
-		// These attributes are defined in gnu.crypto.cipher.IBlockCipher.
-		attributes.put(IMode.KEY_MATERIAL, decodeHex(key_hexencoded));
-		attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(BitBlock128Bit));
-		// These attributes are defined in IMode.
-		attributes.put(IMode.STATE, new Integer(IMode.ENCRYPTION));
-		attributes.put(IMode.IV, decodeHex(iv_hexencoded));
-		try {
-			mode.init(attributes);
-		} catch (InvalidKeyException | IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		int bs = mode.currentBlockSize();
-		cipherOut = new byte[finalplain.length ];
-		// note that the doc from gnu crypto is wrong for the loop count
-		for (int i = 0; i +bs  <= finalplain.length; i += bs){
-			mode.update(finalplain, i, cipherOut, i);
-		}
-		return encodeHex(cipherOut);
-		
+	    
+		byte [] Cipheredbuf=null; 
+		Cipheredbuf = TwoFishCBC(decodeHex(key_hexencoded), decodeHex(iv_hexencoded), plainIn.getBytes());
+		if(Cipheredbuf!=null)
+			return encodeHex(Cipheredbuf );
+		else
+			return "";	
 	}
-
-	
 	
 }// end class 

@@ -41,7 +41,8 @@ public class JSONSF_Crypto {
 	 * @param String type, bytes inparam
 	 *         type can be IV, KEY, DATA
      *            
-     * @return 1 when ok, 0 on error
+     * @return 1 when ok, 
+     * 0 on error (shall never occur as exception is raised)
 	 */
 	public boolean IsParamValid ( String Type, byte [] inparam) {
 		
@@ -52,18 +53,25 @@ public class JSONSF_Crypto {
 			case IV:
 				if (inparam == null)
 					throw new IllegalArgumentException(IV + "is" + NULL);
-				if (inparam.length < BitBlock128Bit){
+				if ( (inparam.length < BitBlock128Bit) || (inparam.length > BitBlock256Bit)){
 					throw new IllegalArgumentException(IV + "shall have a" + SIZE_ERROR);
 				}
 				valid=true;				
 				break;
 
 			case KEY:
-				
+				if (inparam == null)
+					throw new IllegalArgumentException(KEY + "is" + NULL);
+				if ( (inparam.length < BitBlock128Bit) || (inparam.length > BitBlock256Bit)){
+					throw new IllegalArgumentException(KEY + "shall have a" + SIZE_ERROR);
+				}
+				valid=true;				
 				break;
 				
 			case DATA:
-				
+				if (inparam == null)
+					throw new IllegalArgumentException(DATA + "is" + NULL);
+				valid=true;				
 				break;
 				
 			default:
@@ -71,7 +79,6 @@ public class JSONSF_Crypto {
 		}
 
 		return valid;
-		
 	}
 	
 	/**
