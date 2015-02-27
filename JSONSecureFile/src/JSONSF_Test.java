@@ -2,6 +2,7 @@
 import java.io.*;
 import JSONSFCRYPTO.*;
 import JSONSFFILE.*;
+import JSONSFGLOBAL.*;
 /**
  * @author mbl
  * basic test
@@ -46,9 +47,86 @@ public class JSONSF_Test {
      * System.out.println(new String(AESUtil.decryptString(desc,key,iv))); } catch (Exception e) {
      * e.printStackTrace(); } }
      */
+	
+	public int Test_TFSPCBC (){
+		
+		int testres = Constants.Fail;
+		byte[] iv = null;
+		byte[] key = null;
+		byte[] result = null;
+		byte[] firesult = null;
+		String reference = "#~@@@ Un sot savant est sot plus qu’un sot ignorant Jean-Baptiste Poquelin, dit Molière Les Femmes savantes; le monde se divise en 2 categories ceux qui ont un revolvercharg� et ceux qui creusent; toi tu creuses !!!!!";
+		byte[] plaindata = reference.getBytes();
+		String referenceHex = JSONSF_CryptoCipher_TFSPCBC.encodeHex(plaindata);
+		
+		System.out.print("Test_TFSPCBC referenceHex 		is " + referenceHex + "\n");
+		System.out.print("Test_TFSPCBC referenceHex lg 	is " + referenceHex.length() + "\n");
+		
+		JSONSF_CryptoCipher_TFSPCBC Cipher = new JSONSF_CryptoCipher_TFSPCBC();
+		JSONSF_CryptoDecipher_TFSPCBC Decipher = new JSONSF_CryptoDecipher_TFSPCBC ();
+		
+		iv = JSONSF_CryptoCipher_TFSPCBC.decodeHex("3dafba429d9eb430b422da802c9fac41");
+		key = JSONSF_CryptoCipher_TFSPCBC.decodeHex("c286696d887c9aa0611bbb3e2025a45a");
+		
+		result = Cipher.TwoFishSerpentCBC(key, iv, plaindata);
+		if (result !=null){
+			System.out.print("enc result 		is " + JSONSF_CryptoCipher_TFSPCBC.encodeHex(result) + "\n");
+			System.out.print("enc result lg 	is " + JSONSF_CryptoCipher_TFSPCBC.encodeHex(result).length() + "\n");
+
+			
+			firesult = Decipher.TwoFishSerpentCBC(key, iv, result);
+			if (firesult !=null){
+				System.out.print("firesult 			is " + JSONSF_CryptoDecipher_TFSPCBC.encodeHex(firesult)+ "\n");
+				System.out.print("firesult 	lg		is " + JSONSF_CryptoDecipher_TFSPCBC.encodeHex(firesult).length() + "\n");
+		
+		
+			testres = JSONSF_CryptoDecipher_TFSPCBC.encodeHex(firesult).toString().compareTo(referenceHex);
+			}
+		}
+		return testres; 
+	}
+	
+	public int Test_Serpent (){
+		
+		int testres = Constants.Fail;
+		byte[] iv = null;
+		byte[] key = null;
+		byte[] result = null;
+		byte[] firesult = null;
+		String reference = "Un sot savant est sot plus qu’un sot ignorant Jean-Baptiste Poquelin, dit Molière Les Femmes savantes";
+		byte[] plaindata = reference.getBytes();
+		String referenceHex = JSONSF_CryptoCipher_SerpentCBC.encodeHex(plaindata);
+		
+		System.out.print("Test_Serpent referenceHex 		is " + referenceHex + "\n");
+		System.out.print("Test_Serpent referenceHex lg 	is " + referenceHex.length() + "\n");
+		
+		JSONSF_CryptoCipher_SerpentCBC Cipher = new JSONSF_CryptoCipher_SerpentCBC();
+		JSONSF_CryptoDecipher_SerpentCBC Decipher = new JSONSF_CryptoDecipher_SerpentCBC ();
+		
+		iv = JSONSF_CryptoCipher_SerpentCBC.decodeHex("3dafba429d9eb430b422da802c9fac41");
+		key = JSONSF_CryptoCipher_SerpentCBC.decodeHex("c286696d887c9aa0611bbb3e2025a45a");
+		
+		result = Cipher.SerpentCBC(key, iv, plaindata);
+		
+		System.out.print("enc result 		is " + JSONSF_CryptoCipher_SerpentCBC.encodeHex(result) + "\n");
+		System.out.print("enc result lg 	is " + JSONSF_CryptoCipher_SerpentCBC.encodeHex(result).length() + "\n");
+		
+		firesult = Decipher.SerpentCBC(key, iv, result);
+		
+		System.out.print("firesult 			is " + JSONSF_CryptoCipher_SerpentCBC.encodeHex(firesult)+ "\n");
+		System.out.print("firesult 	lg		is " + JSONSF_CryptoCipher_SerpentCBC.encodeHex(firesult).length() + "\n");
+		
+		
+		testres = JSONSF_CryptoCipher_SerpentCBC.encodeHex(firesult).toString().compareTo(referenceHex);
+		
+		
+		return testres; 
+	}
+	
+	
 	public int Test_Twofish (){
 		
-		int testres = 123;
+		int testres = Constants.Fail;
 		byte[] iv = null;
 		byte[] key = null;
 		byte[] result = null;
@@ -81,6 +159,8 @@ public class JSONSF_Test {
 		
 		
 		return testres; 
+	}
+		
 		/**
 referenceHex 		is 556e20736f7420736176616e742065737420736f7420706c7573207175e28099756e20736f742069676e6f72616e74204a65616e2d426170746973746520506f7175656c696e2c20646974204d6f6c69c3a87265204c65732046656d6d657320736176616e746573
 referenceHex lg 	is 208
@@ -106,10 +186,10 @@ firesult 	lg		is 208
 		 */		
 		
 		
-	}
+	
 	public int Test_getWhirlpoolHash_lasydog(){
 		
-		int testres = 123;
+		int testres = Constants.Fail;
 		String strReference = "The quick brown fox jumps over the lazy dog" ;
 		/*
 		 Whirlpool-T("The quick brown fox jumps over the lazy dog") =
@@ -131,7 +211,7 @@ firesult 	lg		is 208
 
 	public int Test_Hash_Sha512 (){
 		
-		int testres = 123;
+		int testres = Constants.Fail;
 		String strReference = "zorroestarrive" ;
 		// HEX: 000E1160CBB34D462BFBEAEADBFA5706A126C713BF33946D30D7222EEE6AA2D1EF0E2E87762917F4CBE7BFBB3C29893284C8EAB81C656468626BE30C0812E845
 		String strReferenceHASH = "AA4RYMuzTUYr++rq2/pXBqEmxxO/M5RtMNciLu5qotHvDi6HdikX9Mvnv7s8KYkyhMjquBxlZGhia+MMCBLoRQ==" ; 
@@ -139,7 +219,7 @@ firesult 	lg		is 208
 		
 		JSONSF_CryptoSha512Hash hashclass = new JSONSF_CryptoSha512Hash();
 		
-		result = hashclass.Hash_Sha512 (strReference);
+		result = hashclass.getStringSha512Hash(strReference);
 		
 		testres = result.compareTo(strReferenceHASH);
 		

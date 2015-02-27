@@ -3,14 +3,6 @@
  */
 package JSONSFCRYPTO;
 
-import gnu.crypto.mode.IMode;
-import gnu.crypto.mode.ModeFactory;
-import gnu.crypto.pad.IPad;
-import gnu.crypto.pad.PadFactory;
-
-import java.security.InvalidKeyException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author bellocch
@@ -33,14 +25,12 @@ public class JSONSF_CryptoCipher_TFSPCBC extends  JSONSF_CryptoCipher_SerpentCBC
 	    * 
 	    * @param bytes buffer
 	    *            key, IV and plain data are byte buffer
-	    * @return encrypted byte buffer pad is PKCS7
+	    * @return encrypted byte buffer pad is PKCS7 or null on error
 	    */
 		public byte [] TwoFishSerpentCBC( byte [] key_bytes, byte [] iv_bytes, byte [] plainIn ){
 		
 			byte [] cipherOutTwoFish = null ;
 			byte [] cipherOutFinal = null ;
-			byte [] key_bytes_serpent = null ;
-			boolean IsAllParamValid=false;
 			
 			cipherOutTwoFish = TwoFishCBC (key_bytes, iv_bytes, plainIn );
 			if (cipherOutTwoFish!=null){

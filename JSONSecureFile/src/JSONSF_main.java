@@ -10,15 +10,13 @@
  */
 
 
-import java.io.IOException;
 import JSONSFCRYPTO.*;
-import java.io.UnsupportedEncodingException;
+
 //import java.net.InetAddress;
 import java.net.UnknownHostException;
 //import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import org.json.simple.parser.ParseException;
 import JSONSFGLOBAL.Constants ;
 
 public class JSONSF_main {
@@ -171,15 +169,24 @@ public class JSONSF_main {
 	                        	
 	                        	//testclass.Test_getWhirlpoolHash_lasydog(); 
 	                        	
-	                        	if (testclass.Test_Twofish () == 0)
+	                        	if (testclass.Test_Twofish () == Constants.Success)
 		                            System.out.println("Test_Twofish is ok");
 	                        	else
 	                        		System.out.println("Test_Twofish is ko, please review the code");
 	                        		
-	                        	 
+	                        	if (testclass.Test_Serpent () == Constants.Success)
+		                            System.out.println("Test_Serpent is ok");
+	                        	else
+	                        		System.out.println("Test_Serpent is ko, please review the code");
+	                        			                        	 
+	                        	if (testclass.Test_TFSPCBC () == Constants.Success)
+		                            System.out.println("Test_TFSPCBC is ok");
+	                        	else
+	                        		System.out.println("Test_TFSPCBC is ko, please review the code");
+	                                         	
+	                        	                        	
 	                        	 //testclass.Test_JSONVersionFile ();
-	                        	
-                      	
+	                        	                      	
 	                            break;
 	                        default:
 	                            throw new IllegalArgumentException("Invalid option \"" + args[0] + "\" specified!");

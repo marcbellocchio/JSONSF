@@ -32,6 +32,12 @@ public interface Constants
 
     /** need to comment ? */
     public static final int Zero = 0;
+ 
+    /** need to comment ? */
+    public static final int Success = Zero;
+    
+    /** need to comment ? */
+    public static final int Fail = 12345;
     
 	/** ### CRYPTO Constants ### */	    
     /**  */
