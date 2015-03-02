@@ -66,7 +66,7 @@ public class JSONSF_ReadFile {
                 //if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==true) 
                 	//	|| (ReadLine.contentEquals(Constants.JSON_Marker_End)== true) ) {
                 	//continue ;
-                	
+                // file shall start by version	
             	if ( SupportedVersionDetected == false){
                     if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==false) 
                 	&& (ReadLine.contentEquals(Constants.JSON_Marker_End)== true) ) {
@@ -115,7 +115,7 @@ public class JSONSF_ReadFile {
 		// short class to analyse the JSON file already opened
 		// will received the first string of the file and will return the number of line of the file
 		// without reading the whole file. the number of lines is based on the version
-		// it must be the first line of the file
+		// version must be the first line of the file
 		
 		// private data
 		

@@ -6,7 +6,7 @@ package JSONSFGLOBAL;
 
 /**
  * @author not mbl
- *
+ * but mbl is used to have global class in C++
  */
 
 public interface Constants
@@ -30,6 +30,13 @@ public interface Constants
     /**  field of the json file */
 	public static final  String Version_1_Fields = "version" + " category"  + " filetype" + " hash" + " data";
 
+	/** ### JSON Version 2 ### */
+    /** number of line of the json file */
+    public static final int Version_2_NumLines = 5;
+   
+    /**  field of the json file */
+	public static final  String Version_2_Fields = "version" + " category"  + " filetype" + " hash" + " data";
+	
     /** need to comment ? */
     public static final int Zero = 0;
  
@@ -45,7 +52,7 @@ public interface Constants
     
     public static final String SERPENTCBC = "serpentcbc";
     
-
+    public static final String TWOFISHSERPENTCBC = "tfspcbc";
 
 }
 
