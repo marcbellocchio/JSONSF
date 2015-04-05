@@ -41,8 +41,8 @@ public class JSONSF_Crypto {
 	 * @param String type, bytes inparam
 	 *         type can be IV, KEY, DATA
      *            
-     * @return 1 when ok, 
-     * 0 on error (shall never occur as exception is raised)
+     * @return true when ok, 
+     * false on error (shall never occur as exception is raised)
 	 */
 	public boolean IsParamValid ( String Type, byte [] inparam) {
 		

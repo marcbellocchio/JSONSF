@@ -167,7 +167,12 @@ public class JSONSF_main {
 	                        	// hash test 
 	                        	JSONSF_Test testclass = new JSONSF_Test(); 
 	                        	
+	                        	testclass.Test_JSONFirstLevel();
+	                        	
 	                        	//testclass.Test_getWhirlpoolHash_lasydog(); 
+	                        	//testclass.Test_JSONParser();
+	                        	
+	                        	
 	                        	
 	                        	if (testclass.Test_Twofish () == Constants.Success)
 		                            System.out.println("Test_Twofish is ok");

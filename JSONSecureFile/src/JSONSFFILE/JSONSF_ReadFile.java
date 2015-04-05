@@ -6,28 +6,30 @@ package JSONSFFILE;
 import JSONSFGLOBAL.Constants ;
 
 
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 
+
 import org.json.simple.parser.*;
 
-import org.json.simple.parser.ContentHandler;
-import org.json.simple.parser.ParseException;
-
 /**
- * 
- */
-
-/**
- * @author mbl
  * JSON encoding decoding https://code.google.com/p/json-simple/wiki/DecodingExamples
  */
-public class JSONSF_ReadFile {
-	
 
+/**
+* @author mbl
+* @brief JSONSF_ReadFile class
+* @usage when a file needs to be opened to check its format, and get data 
+* @param na
+*            
+* @return na
+*/
+public class JSONSF_ReadFile {
 	
 	// ################ JSONSF_ReadFile #############################
 	// private data
@@ -36,6 +38,10 @@ public class JSONSF_ReadFile {
 	private String PathAndFileName;
 	// a line read from String PathAndFileName
 	private String ReadLine ; 
+	//
+	private FileReader FileForGetLine; 
+	
+	private BufferedReader BufferedReaderForGetLine ;
 	
 	private Boolean SupportedVersionDetected;
 	
@@ -45,10 +51,109 @@ public class JSONSF_ReadFile {
     {
     	PathAndFileName = FileName;
     	SupportedVersionDetected = false;
-    	ReadLine= "";
-    	
+    	ReadLine= "";	
     }	
+ 
+    /**
+    * @brief OpenFile
+    * @usage open a buffered reader of the file, to objective is to use getline after
+    * @param none as provided in the constructor           
+    * @return void but exception sent if error
+    */
+    public String  GetReadLine() {
+    	return ReadLine;
+    }
+    
+    
+    /**
+    * @brief OpenFile
+    * @usage open a buffered reader of the file, to objective is to use getline after
+    * @param none as provided in the constructor           
+    * @return void but exception sent if error
+    */
+    public int  OpenFile() throws IOException{
+    	int retval= Constants.Fail; 
+        try {
+            // FileReader reads text files in the default encoding.
+        	 File fl = new File (PathAndFileName);
+        	 if (fl.length() > Constants.Version_all_MAXSIZE) 
+        		 retval = Constants.ErrFiletoBig;
+        	 else{
+	             FileForGetLine = new FileReader(PathAndFileName);
+	            // Always wrap FileReader in BufferedReader.
+	             BufferedReaderForGetLine = new BufferedReader(FileForGetLine);
+	             retval = Constants.Success;
+        	 }      
+        }// end try
+        catch(FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + PathAndFileName + "'"); 
+            System.out.println( ex.getMessage() );
+            ex.printStackTrace();
+        }
+   	 	return retval;
+    }
+    
+    /**
+    * @brief CloseFile
+    * @usage close a buffered reader of the file, to objective is to use getline after
+    * @param none as provided in the constructor           
+    * @return void but exception sent if error
+    */
+    public void  CloseFile() throws IOException{
+        try {
 
+             FileForGetLine.close();
+             // Always close files.
+             BufferedReaderForGetLine.close(); 
+           	    
+        }// end try
+        catch(FileNotFoundException ex) {
+            System.out.println("Unable to close file "); 
+            System.out.println( ex.getMessage() );
+            ex.printStackTrace();
+        }
+    }
+    
+    /**
+    * @brief GetOneLine
+    * @usage collect a line from the file, transform the line in a json file of one line, to collect both field and value
+    * @param            
+    * @return 
+    */
+    public boolean GetOneLine() throws IOException{
+    	
+    	boolean ret=false;
+    	try{
+    		while((ReadLine = BufferedReaderForGetLine.readLine()) != null) {
+    			// remove useless line like { and  } that not needs to be interpreted
+    			if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==false) 
+            	&& (ReadLine.contentEquals(Constants.JSON_Marker_End)== false) ) {
+                	// make each line of the json file a json file of one line
+    				//JSONSF_LineAnalyser jsonanalyser = new JSONSF_LineAnalyser (ReadLine);
+    				ret = true;
+    				break;
+                		
+                }//	if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==false)
+    			
+    		}//end while
+    		
+    	}// end try
+        catch(IOException ex) {
+        	System.out.println("Error reading file '" + PathAndFileName + "'");   
+            System.out.println( ex.getMessage() );
+            ex.printStackTrace();
+        }
+    	return ret;
+
+    }
+    
+    
+    /**
+    * @brief OpenTextFileLineByLine
+    * @usage when a file shall be opened for decryption and reading
+    * @param none as provided in the constructor           
+    * @return StringBuffer containing each line of the opened file
+    */
     public StringBuffer OpenTextFileLineByLine() throws IOException{
     	
     	StringBuffer strBuffer = new StringBuffer();
@@ -71,7 +176,7 @@ public class JSONSF_ReadFile {
                     if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==false) 
                 	&& (ReadLine.contentEquals(Constants.JSON_Marker_End)== true) ) {
                     	
-                    	JSONSF_Analyser jsonanalyser = new JSONSF_Analyser (ReadLine);
+                    	JSONSF_LineAnalyser jsonanalyser = new JSONSF_LineAnalyser (ReadLine);
                     	if (jsonanalyser.CheckVersion() == true ){
                     		// version detected, numberoflines known
                     		SupportedVersionDetected = true;
@@ -110,27 +215,38 @@ public class JSONSF_ReadFile {
     
 	// ################ END OF JSONSF_ReadFile #############################
     
-    // embedded class
-	public static class JSONSF_Analyser {
-		// short class to analyse the JSON file already opened
+    /**
+    * will received the first string of the file and will return the number of line of the file
+    * without reading the whole file. the number of lines is based on the version
+    * version must be the first line of the file
+    * @brief JSONSF_Analyser class embedded as static class in JSONSF_ReadFile
+    * @usage to analyse the JSON file already opened
+    * @param none as provided in the constructor           
+    * @return StringBuffer containing each line of the opened file
+    */
+	public static class JSONSF_LineAnalyser {
 		// will received the first string of the file and will return the number of line of the file
 		// without reading the whole file. the number of lines is based on the version
 		// version must be the first line of the file
 		
 		// private data
 		
-		private String Firstline ; 
-		private int NumberOfLines; 
-		private int Version; 		
+		private String Analyzeline ; 
+		private int NumberOfLines=0; 
+		private int Version=0; 	
+        private boolean VersionDetected = false;
  
-		
-		public JSONSF_Analyser( String Line) {
-			// transform a string from a json in a single json file
-			// add { } to the string and remove , to the line to create a good s + Constants.JSON_Marker_End ;
-			// version zero is not used in file, version start by 1
-			Firstline = Constants.JSON_Marker_Begin + Line.replaceFirst(",", "") +  Constants.JSON_Marker_End;
-            Version = 0;
-            NumberOfLines = 0;;
+	    /**
+			* transform a string from a json file in a single json file to be further interpreted by a json class
+			* add { } to the string and remove the "," from the line to create a good s + Constants.JSON_Marker_End ;
+			* version zero is not used in file, version start by 1
+		    * @brief JSONSF_Analyser class embedded as static class in JSONSF_ReadFile
+		    * @usage to analyse the JSON file already opened
+		    * @param none as provided in the constructor           
+		    * @return StringBuffer containing each line of the opened file
+		    */		
+		public JSONSF_LineAnalyser( String Line) {
+			Analyzeline = Constants.JSON_Marker_Begin + Line.replaceFirst(",", "") +  Constants.JSON_Marker_End;
 		}// end JSONSF_Analyser
 		
 		public int GetNumberOfLines(){
@@ -149,7 +265,6 @@ public class JSONSF_ReadFile {
 		// detect the version in the opened file
 		// return true when version is detected and supported, otherwise it is false
 		public  Boolean CheckVersion () {
-	        Boolean VersionDetected = false;
 			// decode first line to get version if version is not in the string return 0
 			JSONParser parser = new JSONParser();
 			KeyFinder finder = new KeyFinder();
@@ -158,7 +273,7 @@ public class JSONSF_ReadFile {
 
 			try{
 			    while(!finder.isEnd()){
-			    	parser.parse(Firstline, finder, true);
+			    	parser.parse(Analyzeline, finder, true);
 			        if(finder.isFound()){
 			          finder.setFound(false);
 			          finder.getValue();
@@ -168,7 +283,45 @@ public class JSONSF_ReadFile {
 			        	  Version = 1;
 			        	  VersionDetected = true;
 			          default :
+		        	  
+			        	  break;
 			        	  
+			          }// end switch	  
+			         
+			        }// end if
+			    }// end while  
+								
+			}// end try
+			catch(ParseException pe){
+				System.out.println(pe);
+			}
+			
+			return VersionDetected;
+		
+		}// end of GetNumberoflines	
+		
+		
+
+		public  Boolean CheckVersion1 () {
+			// decode first line to get version if version is not in the string return 0
+			JSONParser parser = new JSONParser();
+			KeyFinder finder = new KeyFinder();
+			// now configure keyfinder to find version in the string Firstline
+			finder.setMatchKey(Constants.Version);
+
+			try{
+			    while(!finder.isEnd()){
+			    	parser.parse(Analyzeline, finder, true);
+			        if(finder.isFound()){
+			          finder.setFound(false);
+			          finder.getValue();
+			          switch( Integer.valueOf( (String)finder.getValue()) ){
+			          case 1 :
+			        	  NumberOfLines = Constants.Version_1_NumLines;
+			        	  Version = 1;
+			        	  VersionDetected = true;
+			          default :
+		        	  
 			        	  break;
 			        	  
 			          }// end switch	  
