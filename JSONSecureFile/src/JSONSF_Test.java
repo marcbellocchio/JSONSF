@@ -1,8 +1,30 @@
 
 import java.io.*;
+import JSONSFGLOBAL.Constants ;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
+import org.json.simple.JSONValue;
+
+import java.io.IOException; 
+import java.util.ArrayList; 
+import java.util.Iterator;
+import java.util.LinkedHashMap; 
+import java.util.LinkedList; 
+import java.util.List; 
+import java.util.Map; 
+
+ 
+
+
+import org.json.simple.parser.ContainerFactory; 
+import org.json.simple.parser.JSONParser; 
+import org.json.simple.parser.ParseException; 
+
 import JSONSFCRYPTO.*;
 import JSONSFFILE.*;
 import JSONSFGLOBAL.*;
+import JSONSFOBJECT.JSONSF_firstlevel;
 /**
  * @author mbl
  * basic test
@@ -228,7 +250,47 @@ firesult 	lg		is 208
 		
 	}
 	
+	public void Test_JSONParser (){	
+		  // test code to extract field from json file
+		  String jsonText = "{\"first\": 123, \"second\": [4, 5, 6], \"third\": 789}";
+		  JSONParser parser = new JSONParser();
+		  
+		  ContainerFactory containerFactory = new ContainerFactory(){
+		    public List<?> creatArrayContainer() {
+		      return  new LinkedList();
+		    }
 
+		    public Map<?,?> createObjectContainer() {
+		      return new LinkedHashMap();
+		    }
+		                        
+		  };
+		                
+		  try{
+		    Map<?,?> json = (Map)parser.parse(jsonText, containerFactory);
+		    Iterator<?> iter = json.entrySet().iterator();
+		    System.out.println("==iterate result==");
+		    while(iter.hasNext()){
+		      Map.Entry<?,?> entry = (Map.Entry)iter.next();
+		      System.out.println(entry.getKey() + "=>" + entry.getValue());
+		    }
+		                        
+		    System.out.println("==toJSONString()==");
+		    System.out.println(JSONValue.toJSONString(json));
+		  }
+		  catch(ParseException pe){
+		    System.out.println(pe);
+		  }
+		  
+	}
+
+	public void Test_JSONFirstLevel(){
+		
+		JSONSF_firstlevel myobject = new JSONSF_firstlevel();
+		if (myobject.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample.json") == Constants.Success )
+			myobject.Validate();
+	}
+	
 	public void Test_JSONVersionFile (){
 		
     	StringBuffer strtestbuffer ;
