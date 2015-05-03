@@ -8,6 +8,7 @@ package JSONSFCRYPTO;
 import gnu.crypto.util.Base64;
 
 import java.io.*;
+import java.util.Arrays;
 
 /**
 * @author mbl
@@ -84,7 +85,7 @@ public class JSONSF_Crypto {
 	/**
 	 * Base64Encode a string and return a string
 	 */
-	public String Base64Encode ( String strToEncode) {
+	public static final String Base64Encode ( String strToEncode) {
 		
 		String encryptedString = Base64.encode(strToEncode.getBytes());
 		return encryptedString;
@@ -93,7 +94,7 @@ public class JSONSF_Crypto {
 	/**
 	 * Base64Encode a byte buffer and return a string
 	 */	
-	public String Base64Encode ( byte[] byteToEncode) {
+	public static final String Base64Encode ( byte[] byteToEncode) {
 		
 		String encryptedString;
 		encryptedString = Base64.encode(byteToEncode);
@@ -103,7 +104,7 @@ public class JSONSF_Crypto {
 	/**
 	 * Base64Encode a string and return a string
 	 */
-	public String Base64Decode ( String strToDecode) {
+	public static final String Base64Decode ( String strToDecode) {
 		
 		byte[] decryptedByteArray= {0};
 		try {
@@ -113,6 +114,22 @@ public class JSONSF_Crypto {
 			e.printStackTrace();
 		}
 		return decryptedByteArray.toString();
+		
+	}
+	
+	/**
+	 * Base64Encode a string and return a string
+	 */
+	public static final byte[] Base64DecodeStrToByteBuffer ( String strToDecode) {
+		
+		byte[] decryptedByteArray= {0};
+		try {
+			decryptedByteArray = Base64.decode(strToDecode);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return decryptedByteArray;
 		
 	}
 
@@ -137,6 +154,31 @@ public class JSONSF_Crypto {
               buf.append("0");
           }
           buf.append(Long.toString((int) bytes[i] & 0xff, 16));
+      }
+      return buf.toString();
+  }
+  
+  /**
+   * Turns an array of bytes into a String representing each byte as an
+   * unsigned hex number.
+   * <p>
+   * Method by Santeri Paavolainen, Helsinki Finland 1996<br>
+   * (c) Santeri Paavolainen, Helsinki Finland 1996<br>
+   * Distributed under LGPL.
+   *
+   * @param bytes
+   *            an array of bytes to convert to a hex-string
+   * @return generated hex string
+   */
+  public static final String encodeDec(byte[] bytes) {
+      StringBuffer buf = new StringBuffer(bytes.length * 2);
+      int i;
+
+      for (i = 0; i < bytes.length; i++) {
+          if (((int) bytes[i] & 0xff) < 0x10) {
+              buf.append("0");
+          }
+          buf.append(Long.toString((int) bytes[i] & 0xff, 10));
       }
       return buf.toString();
   }
@@ -217,4 +259,62 @@ public class JSONSF_Crypto {
       return 0x00;
   }   
 
+	/**
+	* @brief wipe
+	* @usage wipe sensitive data after use like key or input data field
+	* @param[in] byte[] bytes the data to wipe
+	* @param[in] String method (fast or secure)      
+	* @return void
+	*/
+public  static final void Wipe(StringBuffer Strbuftowipe, String method) {
+	  
+		byte [] data = new byte [Strbuftowipe.length()];
+		Arrays.fill( data, (byte) 0x45 );
+
+		JSONSF_Crypto CryptoHelp = new JSONSF_Crypto();
+
+		
+	  switch (method){
+	  	case "fast":  		
+	  		Strbuftowipe.replace(0, Strbuftowipe.length(), CryptoHelp.Base64Encode(data));
+	  		break;
+	  	case "secure":
+	  		// rc6
+	  		break;
+	  	default: // fast
+	  		Strbuftowipe.replace(0, Strbuftowipe.length(), CryptoHelp.Base64Encode(data));
+	  		break;
+	  }
+
+    
+}
+  
+	/**
+	* @brief wipe
+	* @usage wipe sensitive data after use like key or input data field
+	* @param[in] byte[] bytes the data to wipe
+	* @param[in] String method (fast or secure)      
+	* @return void
+	*/
+  public  static final void Wipe(byte[] bytestowipe, String method) {
+	  
+	  switch (method){
+	  	case "fast":
+	  		//bytestowipe.length
+	  		//System.arraycopy(pt1, 0, finalplain, 0, pt1.length);
+	  		Arrays.fill( bytestowipe, (byte) 0x0F );
+
+	  		break;
+	  	case "secure":
+	  		// rc6
+	  		
+	  		break;
+	  	default: // fast
+		  	Arrays.fill( bytestowipe, (byte) 0x0F );
+	  		break;
+	  }
+
+      
+  }
+  
 }

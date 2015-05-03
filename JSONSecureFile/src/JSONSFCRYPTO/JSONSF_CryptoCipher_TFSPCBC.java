@@ -3,6 +3,8 @@
  */
 package JSONSFCRYPTO;
 
+import JSONSFGLOBAL.Constants;
+
 
 /**
  * @author bellocch
@@ -35,8 +37,8 @@ public class JSONSF_CryptoCipher_TFSPCBC extends  JSONSF_CryptoCipher_SerpentCBC
 			cipherOutTwoFish = TwoFishCBC (key_bytes, iv_bytes, plainIn );
 			if (cipherOutTwoFish!=null){
 				cipherOutFinal = SerpentCBC (key_bytes, iv_bytes, plainIn );
-			}
-						
+			}		
+			//Wipe(key_bytes, Constants.WIPEMETHOD);	
 			return cipherOutFinal;
 
 		}	

@@ -1,5 +1,7 @@
 package JSONSFCRYPTO;
 
+import JSONSFGLOBAL.Constants;
+
 public class JSONSF_CryptoDecipher_TFSPCBC extends  JSONSF_CryptoDecipher_SerpentCBC{
 
 	public JSONSF_CryptoDecipher_TFSPCBC() {
@@ -25,7 +27,7 @@ public class JSONSF_CryptoDecipher_TFSPCBC extends  JSONSF_CryptoDecipher_Serpen
 			if (DecipherOutTwoFish!=null){
 				DecipherOutFinal = SerpentCBC (key_bytes, iv_bytes, plainIn );
 			}
-						
+			//Wipe(key_bytes, Constants.WIPEMETHOD);				
 			return DecipherOutFinal;
 
 		}	

@@ -167,7 +167,13 @@ public class JSONSF_main {
 	                        	// hash test 
 	                        	JSONSF_Test testclass = new JSONSF_Test(); 
 	                        	
+	                        	if(testclass.Test_DataEncryptionDecryptionFromObject()==Constants.Success)
+		                            System.out.println("Test_DataEncryptionDecryptionFromObject is ok");
+	                        	else
+	                        		System.out.println("Test_DataEncryptionDecryptionFromObject is ko, please review the code");
+	                        	
 	                        	testclass.Test_JSONFirstLevel();
+	                        	                        	
 	                        	
 	                        	//testclass.Test_getWhirlpoolHash_lasydog(); 
 	                        	//testclass.Test_JSONParser();

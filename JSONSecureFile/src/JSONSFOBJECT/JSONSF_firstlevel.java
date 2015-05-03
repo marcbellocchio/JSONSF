@@ -21,6 +21,7 @@ import java.util.Hashtable;
 
 
 
+
 import org.json.simple.parser.*;
 
 
@@ -36,12 +37,31 @@ public class JSONSF_firstlevel {
 	//public String stread;
 	public String stdelimiter;
 	public String[] streadarray;
+	// store all the fields from the json file header
 	public Map <String, String> jsonfileheader;
+	
+	// stored encrypted method value read from file
+	private int encMethod;
 	
 	public JSONSF_firstlevel() {
 		
 		jsonfileheader =  new HashMap <String, String> (); 
 		stdelimiter = ":";
+		encMethod=0;
+	}
+	
+	/**
+	* @brief ExportToFile
+	* @usage create a json file from input data
+	* @param[in] String FileName  
+	* @param[class member]     
+	* @return integer Constants.Success when ok or Constants.Fail or Constants.ErrFiletoBig
+	*/
+	public int ExportToFile(String FileName) {
+		
+		// to complete ...........
+		
+		
 	}
 	
 	/**
@@ -80,11 +100,11 @@ public class JSONSF_firstlevel {
 	* @brief GetFieldsFromVersion
 	* @usage provide the number of fields of the json file according to version
 	* @param[in] int version        
-	* @return int number of fields or 0 when not supported
+	* @return int number of fields or fail when not supported
 	*/	
 	public int GetNbFieldsFromVersion (int version){
 		
-		int retval=0; 
+		int retval=Constants.Fail;  
 		switch (version){
 			case 1:
 				retval = Constants.Version_1_NumLines;
@@ -96,6 +116,38 @@ public class JSONSF_firstlevel {
 		}
 		return retval;
 		
+	}
+	
+	/**
+	* @brief GetEncryptionMethod
+	* @usage provide encMethod
+	* @param[in]        
+	* @return encMethod 1:twofishcbc 2:serpentcbc 3:tfspcbc
+	*/	
+	public int GetEncryptionMethod (){
+		return encMethod;	
+	}
+	
+	/**
+	* @brief CheckEncryptionAlgorithm
+	* @usage check if the encryption algo is supported
+	* @param[in] int value        
+	* @return success or fail when not supported
+	*/	
+	public int CheckEncryptionAlgorithm (int value){
+		
+		int retval=Constants.Fail; 
+		switch (value){
+			case 1: // twofishcbc
+			case 2: // serpentcbc
+			case 3: // tfspcbc
+				retval = Constants.Success;
+				encMethod= value;
+				break;
+			default:
+				break;
+		}
+		return retval;		
 	}
 	
 	/**
@@ -123,17 +175,23 @@ public class JSONSF_firstlevel {
 	/**
 	* @brief Validate
 	* @usage check if the map contains valid data
-	* @param[in] String FileName        
-	* @return integer Constants. Success or Constants.Fail when nb fields different from spec, Constants.ErrToMuchLline when ko
+	* @param[in] String FileName
+	* @return  Constants.Success         
+	* @return Constants.ErrToMuchLline when more lines than expected
+	* @return Constants.ErrVersionNotSupported 
+	* @return Constants.ErrVersionNotPresent 
+	* @return Constants.ErrEncMethodNotSupported  
 	*/
 	public int Validate() {
 		int retval= Constants.Fail ; 
 		int version=0;
 		int nbfields=0;
 		int index = -1;
+		boolean EncMethodSupported = false;
 		String key=null;
 		String value=null;
 		String Fields=null;
+		String EncryptionMethod = Constants.EncryptionMethod; 
 		
 		if(jsonfileheader.size() <= Constants.Version_all_MAXNumLines){
 			// check if the version key is present
@@ -160,20 +218,29 @@ public class JSONSF_firstlevel {
 							if(index >= Constants.Zero){
 								nbfields++;
 							}	
-														
+							
+							if( key.equals(EncryptionMethod) ){
+								// check if it is supported
+
+								if(CheckEncryptionAlgorithm(Integer.valueOf(value))==Constants.Success){
+									EncMethodSupported = true;
+								}
+							}
+								
 						}// end while(iterator.hasNext()){ 	
-						if ( nbfields == GetNbFieldsFromVersion(version) )
-							retval = Constants.Success;
+						if ( nbfields == GetNbFieldsFromVersion(version) ){
+							// correct number of fields detected, now check if the encrypted method is supported
+							if(EncMethodSupported)
+								retval = Constants.Success;
+							else
+								retval = Constants.ErrEncMethodNotSupported;
+						}
+																			
 					}// end if(Fields!=null){
 					else
 						retval= Constants.ErrVersionNotSupported ;
 				}//end else
-
-
-			}// end else
-			
-
-			
+			}// end else				
 		}//  end if if(jsonfileheader.size() <= Constants.Version_all_MAXNumLines)
 		else{
 			retval= Constants.ErrToMuchLline ;

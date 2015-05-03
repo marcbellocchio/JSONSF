@@ -32,6 +32,16 @@ public class JSONSF_CryptoWhirlpoolHash extends JSONSF_Crypto{
 	}
  
 	/**
+	 * Whirlpool-T version of a byte buffer
+	 * return a byte buffer 
+	 */
+	public  byte[] getBufWhirlpoolHash(byte[] input){
+		Whirlpool whirlpool=new Whirlpool();
+		whirlpool.update(input, 0, input.length);
+		return whirlpool.digest();
+	}
+	
+	/**
 	 * Whirlpool-T version of a string
 	 * return a ingstr encoded in base 64
 	 */

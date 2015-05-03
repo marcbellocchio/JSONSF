@@ -22,15 +22,17 @@ public interface Constants
     
     public static final String Empty = "EmptyField";
     
-    /** the mandatory field of the json file */
+    /** the version field of the json file */
 	public static final  String Version = "version";
 
-    /** MAX size of the json file for all version */
+    /** the encryption method  field of the json file */
+	public static final  String EncryptionMethod = "encm";
+	
+    /** the data field of the json file */
+	public static final  String DATA = "data";	
+	
+    /** MAX size of the json file for all version in bytes*/
     public static final int Version_all_MAXSIZE = 1000000;	
-	
-	
-    /** MAX number of line of the json file for all version */
-    public static final int Version_all_MAXNumLines = 5;	
     
     /** current supported version */
     public static final int Version_MAX = 1;	
@@ -38,19 +40,22 @@ public interface Constants
 	
 	/** ### JSON Version 1 ### */
     /** number of line of the json file */
-    public static final int Version_1_NumLines = 5;
+    public static final int Version_1_NumLines = 6;
    
     /**  field of the json file */
-	public static final  String Version_1_Fields = " category"  + " filetype" + " hash" + " data";
+	public static final  String Version_1_Fields = " category"  + " filetype" + " hash" + " encm" + " data";
 
 	/** ### JSON Version 2 ### */
     /** number of line of the json file */
-    public static final int Version_2_NumLines = 5;
+    public static final int Version_2_NumLines = 6;
    
     /**  field of the json file */
-	public static final  String Version_2_Fields =  " category"  + " filetype" + " hash" + " data";
-	
+	public static final  String Version_2_Fields =  " category"  + " filetype" + " hash" + " encm" + " data";
     
+	/** MAX number of line of the json file for all version */
+    public static final int Version_all_MAXNumLines = 6;	
+	
+	
 	/** ### CRYPTO Constants ### */	    
     /**  */
     public static final String TWOFISHCBC = "twofishcbc";
@@ -58,7 +63,21 @@ public interface Constants
     public static final String SERPENTCBC = "serpentcbc";
     
     public static final String TWOFISHSERPENTCBC = "tfspcbc";
+    
+    public static final  String EncryptionMethodList =  " twofishcbc"  + " serpentcbc" + " tfspcbc" ;
+    
+    // can be fast or secure
+    public static final String WIPEMETHOD = "fast";
+    
+	/** MAX key length in bytes */
+    public static final int MaxKeyLengthInBytes = 64;
  
+	/** default key length in bytes */
+    public static final int DefaultKeyLengthInBytes = 16;
+   
+	/** default IV length in bytes */
+    public static final int DefaulIVLengthInBytes = 16;
+    
 	/** ### ERROR management Constants ### */	    
     /**  */
     
@@ -86,7 +105,8 @@ public interface Constants
     /** version not supported  */
     public static final int ErrVersionNotSupported = 23;  
     
-    
+    /** encryption method not supported  */
+    public static final int ErrEncMethodNotSupported = 24;   
     
 }
 

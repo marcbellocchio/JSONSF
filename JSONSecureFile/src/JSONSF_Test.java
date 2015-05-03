@@ -1,6 +1,8 @@
 
 import java.io.*;
+
 import JSONSFGLOBAL.Constants ;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
@@ -17,6 +19,9 @@ import java.util.Map;
  
 
 
+
+
+
 import org.json.simple.parser.ContainerFactory; 
 import org.json.simple.parser.JSONParser; 
 import org.json.simple.parser.ParseException; 
@@ -24,6 +29,8 @@ import org.json.simple.parser.ParseException;
 import JSONSFCRYPTO.*;
 import JSONSFFILE.*;
 import JSONSFGLOBAL.*;
+import JSONSFOBJECT.JSONSF_DataDecrypt;
+import JSONSFOBJECT.JSONSF_DataEncrypt;
 import JSONSFOBJECT.JSONSF_firstlevel;
 /**
  * @author mbl
@@ -101,7 +108,7 @@ public class JSONSF_Test {
 				System.out.print("firesult 			is " + JSONSF_CryptoDecipher_TFSPCBC.encodeHex(firesult)+ "\n");
 				System.out.print("firesult 	lg		is " + JSONSF_CryptoDecipher_TFSPCBC.encodeHex(firesult).length() + "\n");
 		
-		
+			JSONSF_Crypto.Wipe(key, Constants.WIPEMETHOD);
 			testres = JSONSF_CryptoDecipher_TFSPCBC.encodeHex(firesult).toString().compareTo(referenceHex);
 			}
 		}
@@ -289,7 +296,61 @@ firesult 	lg		is 208
 		JSONSF_firstlevel myobject = new JSONSF_firstlevel();
 		if (myobject.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample.json") == Constants.Success )
 			myobject.Validate();
+		
+		StringBuffer temp = new StringBuffer ("this is mw passphrase");
+		
+		JSONSF_DataDecrypt myDataDecryptObject = new JSONSF_DataDecrypt (temp);
+		if (myDataDecryptObject.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample.json") == Constants.Success )
+			myDataDecryptObject.Validate();
+		
 	}
+
+	public int  Test_DataEncryptionDecryptionFromObject(){
+		
+		int result; 
+		// quick test the encoding and decoding features of the package JSONSFOBJECT
+		StringBuffer strbufpf = new StringBuffer("erikaship");
+		StringBuffer strbufdata = new StringBuffer("{hellomyfriendthisisatestsample}");
+		
+		// encrypted data is in hex encoding 116c15a873086b81345139b54ecb3b3a6b80bb236f9064cec900e41a34ab8778
+		// encrypted data is in base64 encoding EWwVqHMIa4E0UTm1Tss7OmuAuyNvkGTOyQDkGjSrh3g=
+		
+		
+		//System.out.println("clear data is " + strbufdata + "\n" );
+		//System.out.println("clear data is " + strbufdata.toString() + "\n" );
+		//System.out.println("clear data is " + JSONSF_Crypto.encodeDec(strbufdata.toString().getBytes()) + "\n" );
+		
+		//JSONSF_Crypto.encodeDec()
+		JSONSF_DataEncrypt myobjectforencryption = new JSONSF_DataEncrypt(strbufpf, strbufdata);
+		myobjectforencryption.DoEncryption(1);
+		
+		//myobjectforencryption.GetEncryptedData();
+
+		System.out.println("encrypted data is " + myobjectforencryption.GetEncryptedData() + "\n" );
+		
+		JSONSF_DataDecrypt myobjectfordecryption = new JSONSF_DataDecrypt(strbufpf);
+		
+
+		if (myobjectfordecryption.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample_erika.json") == Constants.Success ){
+			myobjectfordecryption.Validate();
+			myobjectfordecryption.DoDecryption();
+			myobjectfordecryption.GetClearData();
+			System.out.println("reference clear data is " + strbufdata + "\n" );
+			System.out.println("decrypted clear data is " + myobjectfordecryption.GetClearData() + "\n" );
+		}
+			
+		
+		result = strbufdata.toString().compareTo(myobjectfordecryption.GetClearData());	
+		JSONSF_Crypto.Wipe (strbufpf,Constants.WIPEMETHOD);
+		JSONSF_Crypto.Wipe (strbufdata,Constants.WIPEMETHOD);	
+		
+		return result;
+		
+		
+	}
+
+	
+	
 	
 	public void Test_JSONVersionFile (){
 		
