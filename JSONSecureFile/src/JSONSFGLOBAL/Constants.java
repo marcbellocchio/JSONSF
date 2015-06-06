@@ -39,30 +39,38 @@ public interface Constants
         
 	
 	/** ### JSON Version 1 ### */
-    /** number of line of the json file */
-    public static final int Version_1_NumLines = 6;
+    /** number of line of the json file (version + Version_1_Fields)*/
+    public static final int Version_1_NumLines = 7;
    
     /**  field of the json file */
-	public static final  String Version_1_Fields = " category"  + " filetype" + " hash" + " encm" + " data";
+	public static final  String Version_1_Fields = " category"  + " filetype" + " desc" + " hash" + " encm" + " data";
 
 	/** ### JSON Version 2 ### */
-    /** number of line of the json file */
-    public static final int Version_2_NumLines = 6;
+    /** number of line of the json file (version + Version_2_Fields) */
+    public static final int Version_2_NumLines = 7;
    
     /**  field of the json file */
-	public static final  String Version_2_Fields =  " category"  + " filetype" + " hash" + " encm" + " data";
+	public static final  String Version_2_Fields =  " category"  + " filetype" + " desc" + " hash" + " encm" + " data";
     
 	/** MAX number of line of the json file for all version */
-    public static final int Version_all_MAXNumLines = 6;	
+    public static final int Version_all_MAXNumLines = 7;	
 	
 	
 	/** ### CRYPTO Constants ### */	    
     /**  */
+    public static final int ENC_NONE = 0;
+    
     public static final String TWOFISHCBC = "twofishcbc";
     
+    public static final int ENC_TWOFISHCBC = 1;
+        
     public static final String SERPENTCBC = "serpentcbc";
     
+    public static final int ENC_SERPENTCBC = 2;
+    
     public static final String TWOFISHSERPENTCBC = "tfspcbc";
+    
+    public static final int ENC_TWOFISHSERPENTCBC = 3;    
     
     public static final  String EncryptionMethodList =  " twofishcbc"  + " serpentcbc" + " tfspcbc" ;
     

@@ -9,7 +9,7 @@ import JSONSFCRYPTO.JSONSF_CryptoDecipher_TwoFishCBC;
 import JSONSFCRYPTO.JSONSF_CryptoGenerateKeys;
 import JSONSFGLOBAL.Constants ;
 
-public class JSONSF_DataEncrypt {
+public class JSONSF_DataEncrypt extends JSONSF_firstlevel {
 
 	// used to hold the encrypted data
 	private byte [] EncData;
@@ -19,30 +19,57 @@ public class JSONSF_DataEncrypt {
 	
 	private StringBuffer DataToEncrypt; 
 	
+	/**
+	* @brief JSONSF_DataEncrypt constructor
+	* @usage when data shall be encrypted to be inserted in a json file or just be encrypted
+	* @param StringBuffer InputPassphrase, StringBuffer InputData      
+	* @return na
+	*/
 	public JSONSF_DataEncrypt(StringBuffer InputPassphrase, StringBuffer InputData ) {
 		// TODO Auto-generated constructor stub
 		super();
 		Passphrase = new StringBuffer (InputPassphrase);
 		DataToEncrypt = new StringBuffer (InputData);
 		EncData = null;	
-		
+	}
+
+	/**
+	* @brief JSONSF_DataEncrypt constructor
+	* @usage when data shall be encrypted to be inserted in a json file; data inside the map will be encrypted
+	* @param StringBuffer InputPassphrase
+	* @     
+	* @return na
+	*/
+	public JSONSF_DataEncrypt(StringBuffer InputPassphrase ) {
+		// TODO Auto-generated constructor stub
+		super();
+		Passphrase = new StringBuffer (InputPassphrase);
+		//
+		//DataToEncrypt = new StringBuffer (InputData);
+		// get DataToEncrypt for jsonfileheaderExport	
+		DataToEncrypt= null;
+		EncData = null;	
 	}
 	
 	/**
 	* @author mbl
-	* @brief DoEncryption on data to be added to json file
+	* @brief DoEncryption on data to be added to json file, DataToEncrypt is the data in clear to be encrypted; clear data shall be wiped after usage
 	* @usage when data shall be encrypted to be inserted in a json file
-	* @param na        
+	* @param int encmethod      
 	* @return na
 	*/	
 	public void DoEncryption(int encmethod){
 		// based on encryption info decryption will occur
-		// first generate keys based on passphrase
-		
+		// first generate keys based on passphrase		
 		JSONSF_CryptoGenerateKeys GenKeys = new JSONSF_CryptoGenerateKeys();
 		GenKeys.DoKeyGeneration(Passphrase);
+		// test if DataToEncrypt is already allocated
+		if(DataToEncrypt==null){
+			DataToEncrypt = GetDataFromMapForExport();
+		}// end if(DataToEncrypt==null)
 		
 		switch( encmethod ){
+
 		case 1: // twofishcbc	
 			JSONSF_CryptoCipher_TwoFishCBC Cipher = new JSONSF_CryptoCipher_TwoFishCBC ();
 			EncData = Cipher.TwoFishCBC(GenKeys.GetKey1(Constants.DefaultKeyLengthInBytes), GenKeys.GetIV(Constants.DefaulIVLengthInBytes), DataToEncrypt.toString().getBytes());
@@ -61,7 +88,7 @@ public class JSONSF_DataEncrypt {
 		}
 		GenKeys.WipeAll();
 
-	}
+	}// end 
 
 	/**
 	* @brief GetEncryptedData

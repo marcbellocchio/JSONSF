@@ -1,0 +1,5 @@
+From UI get the field for encryption
+put data to encrypt in a string buffer
+then create a map with all the field
+then do encryption
+finally create the file on disk

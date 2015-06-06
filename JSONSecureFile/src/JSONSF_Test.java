@@ -295,13 +295,13 @@ firesult 	lg		is 208
 		
 		JSONSF_firstlevel myobject = new JSONSF_firstlevel();
 		if (myobject.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample.json") == Constants.Success )
-			myobject.Validate();
+			myobject.ValidateImport();
 		
 		StringBuffer temp = new StringBuffer ("this is mw passphrase");
 		
 		JSONSF_DataDecrypt myDataDecryptObject = new JSONSF_DataDecrypt (temp);
 		if (myDataDecryptObject.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample.json") == Constants.Success )
-			myDataDecryptObject.Validate();
+			myDataDecryptObject.ValidateImport();
 		
 	}
 
@@ -322,7 +322,7 @@ firesult 	lg		is 208
 		
 		//JSONSF_Crypto.encodeDec()
 		JSONSF_DataEncrypt myobjectforencryption = new JSONSF_DataEncrypt(strbufpf, strbufdata);
-		myobjectforencryption.DoEncryption(1);
+		myobjectforencryption.DoEncryption(Constants.ENC_TWOFISHCBC);
 		
 		//myobjectforencryption.GetEncryptedData();
 
@@ -332,7 +332,7 @@ firesult 	lg		is 208
 		
 
 		if (myobjectfordecryption.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample_erika.json") == Constants.Success ){
-			myobjectfordecryption.Validate();
+			myobjectfordecryption.ValidateImport();
 			myobjectfordecryption.DoDecryption();
 			myobjectfordecryption.GetClearData();
 			System.out.println("reference clear data is " + strbufdata + "\n" );

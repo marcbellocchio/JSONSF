@@ -53,6 +53,12 @@ public class JSONSF_DataDecrypt extends JSONSF_firstlevel {
 		// get key shall be 16 bytes long
 		
 		switch( GetEncryptionMethod () ){
+		
+		case 0: // none clear data
+			
+			ClearData = JSONSF_Crypto.Base64DecodeStrToByteBuffer(jsonfileheaderImport.get(Constants.DATA));
+			
+			break;
 		case 1: // twofishcbc	
 			
 			JSONSF_CryptoDecipher_TwoFishCBC Decipher = new JSONSF_CryptoDecipher_TwoFishCBC ();
@@ -60,7 +66,7 @@ public class JSONSF_DataDecrypt extends JSONSF_firstlevel {
             // data in jsonfile has been base64 encoded
 			//System.out.println("enc data base 64 is " + jsonfileheader.get(Constants.DATA) + "\n" );
 			// use keys previously generated, decode base 64 the data collected from the json file
-			ClearData = Decipher.TwoFishCBC(GenKeys.GetKey1(Constants.DefaultKeyLengthInBytes), GenKeys.GetIV(Constants.DefaulIVLengthInBytes), JSONSF_Crypto.Base64DecodeStrToByteBuffer(jsonfileheader.get(Constants.DATA)));		
+			ClearData = Decipher.TwoFishCBC(GenKeys.GetKey1(Constants.DefaultKeyLengthInBytes), GenKeys.GetIV(Constants.DefaulIVLengthInBytes), JSONSF_Crypto.Base64DecodeStrToByteBuffer(jsonfileheaderImport.get(Constants.DATA)));		
 
 			break;
 		case 2: // serpentcbc
