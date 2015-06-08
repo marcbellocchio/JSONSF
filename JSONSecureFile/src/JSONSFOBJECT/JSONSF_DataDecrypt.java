@@ -55,9 +55,7 @@ public class JSONSF_DataDecrypt extends JSONSF_firstlevel {
 		switch( GetEncryptionMethod () ){
 		
 		case 0: // none clear data
-			
 			ClearData = JSONSF_Crypto.Base64DecodeStrToByteBuffer(jsonfileheaderImport.get(Constants.DATA));
-			
 			break;
 		case 1: // twofishcbc	
 			

@@ -310,13 +310,10 @@ firesult 	lg		is 208
 			myDataDecryptObject.ValidateImport();
 		
 	}
-
 	public int Test_ExportObjectToJSON (){
 		int result = Constants.Fail; 
-		
-	
+		// tested the 07 june @23.30 ok
 			
-		
 		
 		// create a fake data map as if it was coming from an UI
 		HashMap<StringBuffer,StringBuffer> testbank = new HashMap<StringBuffer, StringBuffer>();

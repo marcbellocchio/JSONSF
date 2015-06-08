@@ -31,7 +31,6 @@ public class JSONSF_WriteFile {
 	// filename to open
 	private String PathAndFileName;
 
-	//
 	private FileWriter FileForWriteLine; 
 	
 	private BufferedWriter BufferedWriterLine ;

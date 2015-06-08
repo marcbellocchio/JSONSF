@@ -70,7 +70,7 @@ public class JSONSF_DataEncrypt extends JSONSF_firstlevel {
 		
 		switch( encmethod ){
 		
-		case 0: // clear data
+		case 0: // clear data, none encryption
 			SetDataInMapForExport(new StringBuffer (GetEncryptedData()) );
 			break;
 

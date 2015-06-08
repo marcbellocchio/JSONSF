@@ -33,7 +33,6 @@ public class JSONSF_ReadFile {
 	
 	// ################ JSONSF_ReadFile #############################
 	// private data
-	
 	// filename to open
 	private String PathAndFileName;
 	// a line read from String PathAndFileName
