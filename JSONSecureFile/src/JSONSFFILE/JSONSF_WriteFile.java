@@ -5,11 +5,11 @@ package JSONSFFILE;
 
 import JSONSFGLOBAL.Constants ;
 
-import java.io.BufferedReader;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
@@ -30,8 +30,7 @@ public class JSONSF_WriteFile {
 	
 	// filename to open
 	private String PathAndFileName;
-	// a line read from String PathAndFileName
-	private String WriteLine ; 
+
 	//
 	private FileWriter FileForWriteLine; 
 	
@@ -45,7 +44,7 @@ public class JSONSF_WriteFile {
 		// TODO Auto-generated constructor stub
 		PathAndFileName = FileName;
     	SupportedVersionDetected = false;
-    	WriteLine= "";	
+	
 	}
 	
 	   /**
@@ -59,14 +58,11 @@ public class JSONSF_WriteFile {
 	        try {
 	            // FileWriter writes text files in the default encoding.
 	        	 File fl = new File (PathAndFileName);
-	        	 if (fl.length() > Constants.Version_all_MAXSIZE) 
-	        		 retval = Constants.ErrFiletoBig;
-	        	 else{
-	        		 FileForWriteLine = new FileWriter(PathAndFileName);
-		            // Always wrap FileWriter in BufferedWriter.
-	        		 BufferedWriterLine = new BufferedWriter(FileForWriteLine);
-		             retval = Constants.Success;
-	        	 }      
+	        	FileForWriteLine = new FileWriter(fl);
+	            // Always wrap FileWriter in BufferedWriter.
+        		 BufferedWriterLine = new BufferedWriter(FileForWriteLine);
+	             retval = Constants.Success;
+	        	     
 	        }// end try
 	        catch(FileNotFoundException ex) {
 	            System.out.println("Unable to write file '" + PathAndFileName + "'"); 
@@ -80,28 +76,35 @@ public class JSONSF_WriteFile {
 	     * @brief Write a MAP in a file in json format
 	     * @usage when the map shall be written to file in a json format
 	     * @param Map <StringBuffer, StringBuffer> MapToWrite           
-	     * @return true when a line
+	     * @return void
 	     */
 	     public void WriteMap(Map <StringBuffer, StringBuffer> MapToWrite) throws IOException{
 	     	
     		StringBuffer key=null;
     		StringBuffer value=null;
     		String LineToWrite = null;
+    		int nbmapkeyvalue=0 ; 
     		
 	     	try{
 	     		// write {
-	     		BufferedWriterLine.write(Constants.JSON_Marker_Begin);
+	     		BufferedWriterLine.write(Constants.JSON_Marker_Begin + "\r\n");
+	     		MapToWrite.size();
 	     		// loop all map file and write to file	    		
 	    		Iterator <StringBuffer>iterator = MapToWrite.keySet().iterator();
 	    		while(iterator.hasNext()){
 	    			// get all fields
 	    			key   = (StringBuffer)iterator.next();
-	    			value = MapToWrite.get(key.toString());
-	    			LineToWrite = "\" " + key.toString() + " \" " + ":" + "\" " + value.toString() + "\" " + "\r\n " ;
+	    			value = MapToWrite.get(key);
+	    			LineToWrite = "\"" + key.toString() + "\" " + ":" + "\"" + value.toString() + "\"" ;
+	    			if(++nbmapkeyvalue == MapToWrite.size() )
+	    				LineToWrite = LineToWrite + "\r\n";
+	    			else
+	    				LineToWrite = LineToWrite + "," + "\r\n";
+
 	    			BufferedWriterLine.write(LineToWrite);	     		
-	     		BufferedWriterLine.write(Constants.JSON_Marker_End);
-	    		}// end while
 	     		
+	    		}// end while
+	    		BufferedWriterLine.write(Constants.JSON_Marker_End);
 	     	}// end try
 	         catch(IOException ex) {
 	         	System.out.println("Error reading file '" + PathAndFileName + "'");   
@@ -110,8 +113,6 @@ public class JSONSF_WriteFile {
 	         }
 	     }
 
-	    
-	    
 	    /**
 	     * @brief CloseFile
 	     * @usage close a buffered writer of the file, 
@@ -120,10 +121,13 @@ public class JSONSF_WriteFile {
 	     */
 	     public void  CloseFile() throws IOException{
 	         try {
-
-	              FileForWriteLine.close();
-	              // Always close files.
+	              BufferedWriterLine.flush();
 	              BufferedWriterLine.close(); 
+	              
+	        	 //FileForWriteLine.flush();
+	        	 //FileForWriteLine.close();
+	              // Always close files.
+
 	            	    
 	         }// end try
 	         catch(FileNotFoundException ex) {

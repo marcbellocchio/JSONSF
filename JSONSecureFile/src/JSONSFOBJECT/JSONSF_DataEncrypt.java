@@ -69,10 +69,15 @@ public class JSONSF_DataEncrypt extends JSONSF_firstlevel {
 		}// end if(DataToEncrypt==null)
 		
 		switch( encmethod ){
+		
+		case 0: // clear data
+			SetDataInMapForExport(new StringBuffer (GetEncryptedData()) );
+			break;
 
 		case 1: // twofishcbc	
 			JSONSF_CryptoCipher_TwoFishCBC Cipher = new JSONSF_CryptoCipher_TwoFishCBC ();
 			EncData = Cipher.TwoFishCBC(GenKeys.GetKey1(Constants.DefaultKeyLengthInBytes), GenKeys.GetIV(Constants.DefaulIVLengthInBytes), DataToEncrypt.toString().getBytes());
+			SetDataInMapForExport(new StringBuffer (GetEncryptedData()) );
 			break;
 		case 2: // serpentcbc
 			

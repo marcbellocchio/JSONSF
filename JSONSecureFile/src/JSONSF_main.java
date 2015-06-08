@@ -167,6 +167,13 @@ public class JSONSF_main {
 	                        	// hash test 
 	                        	JSONSF_Test testclass = new JSONSF_Test(); 
 	                        	
+	                        	
+	                            if(testclass.Test_ExportObjectToJSON()==Constants.Success)
+		                            System.out.println("Test_ExportObjectToJSON is ok");
+	                        	else
+	                        		System.out.println("Test_ExportObjectToJSON is ko, please review the code");
+	                        	
+	                        	
 	                        	if(testclass.Test_DataEncryptionDecryptionFromObject()==Constants.Success)
 		                            System.out.println("Test_DataEncryptionDecryptionFromObject is ok");
 	                        	else

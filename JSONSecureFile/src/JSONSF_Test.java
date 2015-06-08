@@ -10,6 +10,7 @@ import org.json.simple.JSONValue;
 
 import java.io.IOException; 
 import java.util.ArrayList; 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap; 
 import java.util.LinkedList; 
@@ -17,6 +18,9 @@ import java.util.List;
 import java.util.Map; 
 
  
+
+
+
 
 
 
@@ -41,7 +45,7 @@ import JSONSFOBJECT.JSONSF_firstlevel;
 public class JSONSF_Test {
 
 	public JSONSF_Test() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
     /*
@@ -257,16 +261,18 @@ firesult 	lg		is 208
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void Test_JSONParser (){	
 		  // test code to extract field from json file
 		  String jsonText = "{\"first\": 123, \"second\": [4, 5, 6], \"third\": 789}";
 		  JSONParser parser = new JSONParser();
 		  
 		  ContainerFactory containerFactory = new ContainerFactory(){
-		    public List<?> creatArrayContainer() {
+		    //@SuppressWarnings("rawtypes")
+			public List<?> creatArrayContainer() {
 		      return  new LinkedList();
 		    }
-
+		    //@SuppressWarnings("rawtypes")
 		    public Map<?,?> createObjectContainer() {
 		      return new LinkedHashMap();
 		    }
@@ -305,6 +311,41 @@ firesult 	lg		is 208
 		
 	}
 
+	public int Test_ExportObjectToJSON (){
+		int result = Constants.Fail; 
+		
+	
+			
+		
+		
+		// create a fake data map as if it was coming from an UI
+		HashMap<StringBuffer,StringBuffer> testbank = new HashMap<StringBuffer, StringBuffer>();
+
+		testbank.put(new StringBuffer("version"), new StringBuffer("1"));
+		testbank.put(new StringBuffer("category"), new StringBuffer("bank"));
+		testbank.put(new StringBuffer("filetype"), new StringBuffer("json"));
+		testbank.put(new StringBuffer("desc"), new StringBuffer("account HSBC"));
+		testbank.put(new StringBuffer("hash"), new StringBuffer("AE45B7"));
+		testbank.put(new StringBuffer("encm"), new StringBuffer("1"));
+		testbank.put(new StringBuffer("data"), new StringBuffer("{\"login\":\"zorro\",\"pass\":\"rambo89\"}"));
+		
+		StringBuffer strbufpf = new StringBuffer("MyPasswordIs");
+		// create object with passphrase
+		JSONSF_DataEncrypt myobjectforencryption = new JSONSF_DataEncrypt(strbufpf);
+		// provide the map to encrypt the data field
+		myobjectforencryption.SetMapForExport (testbank);
+		// parse the whole map to check coherence
+		if (myobjectforencryption.ValidateExport()== Constants.Success){
+			// do encrypt data value
+			myobjectforencryption.DoEncryption(myobjectforencryption.GetEncryptionMethod ());
+			result= myobjectforencryption.ExportToFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample_enc_HSBC.json");
+			
+		}
+		//	
+		return result;
+		
+	}
+	
 	public int  Test_DataEncryptionDecryptionFromObject(){
 		
 		int result; 

@@ -3,27 +3,23 @@ package JSONSFOBJECT;
 import JSONSFGLOBAL.Constants ;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap; 
-import java.util.LinkedList; 
-import java.util.List; 
+//import java.util.LinkedHashMap; 
+//import java.util.LinkedList; 
+//import java.util.List; 
 import java.util.Map; 
 
 import JSONSFFILE.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+//import java.io.BufferedReader;
+//import java.io.FileNotFoundException;
+//import java.io.FileReader;
 import java.io.IOException;
 
 
 import java.util.HashMap;
-import java.util.Hashtable;
+//import java.util.Hashtable;
 
-
-
-
-
-import org.json.simple.parser.*;
+//import org.json.simple.parser.*;
 
 
 /**
@@ -39,8 +35,6 @@ public class JSONSF_firstlevel {
 	private int encMethod;
 	// store all the fields to be inserted into the json file header
 	private Map <StringBuffer, StringBuffer> jsonfileheaderExport;
-	
-	//public String stread;
 	public String stdelimiter;
 	public String[] streadarray;
 	// store all the fields from the json file header
@@ -60,7 +54,7 @@ public class JSONSF_firstlevel {
 	* @param[in] int version        
 	* @return int number of fields or fail when not supported
 	*/	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void SetMapForExport (HashMap ToExport){
 		jsonfileheaderExport.putAll(ToExport);	
 	}
@@ -80,8 +74,8 @@ public class JSONSF_firstlevel {
 		while(iterator.hasNext()){
 			// get remaining fields
 			key   = (StringBuffer)iterator.next();
-			value = jsonfileheaderExport.get(key.toString());
-			if( key.equals(Constants.DATA) ){
+			value = jsonfileheaderExport.get(key);
+			if( key.toString().equals(Constants.DATA) ){
 				// exit from while and return value
 				ret = value;
 				break;
@@ -104,7 +98,7 @@ public class JSONSF_firstlevel {
 		while(iterator.hasNext()){
 			// get remaining fields
 			key   = (StringBuffer)iterator.next();
-			if( key.equals(Constants.DATA) ){
+			if( key.toString().equals(Constants.DATA) ){
 				// replace clear value with encrypted data
 				jsonfileheaderExport.replace(key, EncryptedData);
 				retval = Constants.Success;
@@ -119,7 +113,7 @@ public class JSONSF_firstlevel {
 	* @usage create a json file from input data
 	* @param[in] String FileName  
 	* @param[class member]     
-	* @return integer Constants.Success when ok or Constants.Fail or Constants.ErrFiletoBig
+	* @return integer Constants.Success when ok or Constants.Fail 
 	*/
 	public int ExportToFile(String FileName) {
 		int retval= Constants.Fail ; 
@@ -128,6 +122,20 @@ public class JSONSF_firstlevel {
 		// then shall be converted in json
 		// finally shall be written in the file
 		
+		JSONSF_WriteFile wFile = new JSONSF_WriteFile( FileName);
+		try {
+			if (wFile!=null){
+				if (wFile.OpenFile()==Constants.Success ){
+					wFile.WriteMap(jsonfileheaderExport);	
+					wFile.CloseFile();
+					retval = Constants.Success;
+				}
+			}// end 
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 		return retval;
 	}
 	
@@ -200,7 +208,7 @@ public class JSONSF_firstlevel {
 	/**
 	* @brief CheckEncryptionAlgorithm
 	* @usage check if the encryption algo is supported
-	* @param[in] int value        
+	* @param[in] int value     [out]  variable  encMethod is initialised
 	* @return success or fail when not supported
 	*/	
 	public int CheckEncryptionAlgorithm (int value){
@@ -265,7 +273,7 @@ public class JSONSF_firstlevel {
 		
 		if(jsonfileheaderImport.size() <= Constants.Version_all_MAXNumLines){
 			// check if the version key is present in first place
-			value = jsonfileheaderImport.get(Constants.Version);
+			value = GetValueInStringMap(Constants.Version);
 			if ((value==null) )
 				retval= Constants.ErrVersionNotPresent ;	
 			else{
@@ -316,6 +324,58 @@ public class JSONSF_firstlevel {
 			
 		return retval;
 	}	
+
+	/**
+	* @brief  search value from input key
+	* @usage  when a key:value shall be present in a map of string
+	* @param  [in] String RefKey
+	* @return value != null when ok       
+	*/
+	public String GetValueInStringMap(String RefKey) {
+		
+		String key=null;
+		String value=null;
+		
+		if (jsonfileheaderImport.containsKey(RefKey)==true ){
+			Iterator <String>iterator = jsonfileheaderImport.keySet().iterator();
+			while(iterator.hasNext()){
+				// get remaining fields
+				key   = (String)iterator.next();
+				if( key.equals(RefKey) ){
+					value = jsonfileheaderImport.get(key);
+					break;
+				}					
+			}// end while				
+		}// end if		
+		return value;		
+	}
+	
+	/**
+	* @brief  search value from input key
+	* @usage  when a key:value shall be present in a map
+	* @param  [in] StringBuffer RefKey
+	* @return value != null when ok       
+	*/
+	public StringBuffer GetValueInStringBufferMap(StringBuffer RefKey) {
+		
+		StringBuffer key=null;
+		StringBuffer value=null;
+		
+		//if (jsonfileheaderExport.containsKey(RefKey)==true ){
+		
+			Iterator <StringBuffer>iterator = jsonfileheaderExport.keySet().iterator();
+			while(iterator.hasNext()){
+				// get remaining fields
+				key   = (StringBuffer)iterator.next();
+				if( key.toString().equals(RefKey.toString())==true ){
+					value = jsonfileheaderExport.get(key);
+					break;
+				}					
+			}// end while				
+		//}// end if		
+		return value;		
+	}
+	
 	
 	/**
 	* @brief  Validate the output data to be written in the json file, please note that version (key) must be the first field of the file to recover all the others
@@ -340,10 +400,14 @@ public class JSONSF_firstlevel {
 		
 		if(jsonfileheaderExport.size() <= Constants.Version_all_MAXNumLines){
 			// check if the version key is present in first place
-			value = jsonfileheaderExport.get(Constants.Version);
-			if ((value==null) )
+			//value = jsonfileheaderExport.containsKey(Constants.Version);
+			//jsonfileheaderExport.get(key)
+			//jsonfileheaderExport.containsKey(value)
+			value=GetValueInStringBufferMap(new StringBuffer(Constants.Version));
+			if (value==null )
 				retval= Constants.ErrVersionNotPresent ;	
 			else{
+				// get value of version
 				version = Integer.valueOf(value.toString());
 				if (version > Constants.Version_MAX)
 					retval= Constants.ErrVersionNotSupported ;
@@ -357,13 +421,13 @@ public class JSONSF_firstlevel {
 						while(iterator.hasNext()){
 							// get remaining fields
 							key   = (StringBuffer)iterator.next();
-							value = jsonfileheaderExport.get(key.toString());
+							value = jsonfileheaderExport.get(key);
 							// check if key is part of Fields
 							index = Fields.indexOf(key.toString());
 							if(index >= Constants.Zero){
 								nbfields++;
 							}	
-							if( key.equals(EncryptionMethod) ){
+							if( key.toString().equals(EncryptionMethod) ){
 								// check if it is supported
 								if(CheckEncryptionAlgorithm(Integer.valueOf(value.toString()))==Constants.Success){
 									EncMethodSupported = true;
