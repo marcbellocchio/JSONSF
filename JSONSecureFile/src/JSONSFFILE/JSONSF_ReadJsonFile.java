@@ -29,9 +29,9 @@ import org.json.simple.parser.*;
 *            
 * @return na
 */
-public class JSONSF_ReadFile {
+public class JSONSF_ReadJsonFile {
 	
-	// ################ JSONSF_ReadFile #############################
+	
 	// private data
 	// filename to open
 	private String PathAndFileName;
@@ -45,7 +45,7 @@ public class JSONSF_ReadFile {
 	private Boolean SupportedVersionDetected;
 	
 	// constructor 
-    public JSONSF_ReadFile(String FileName)
+    public JSONSF_ReadJsonFile(String FileName)
     throws IOException
     {
     	PathAndFileName = FileName;
@@ -59,7 +59,7 @@ public class JSONSF_ReadFile {
     * @brief OpenFile
     * @usage open a buffered reader of the file, to objective is to use getline after
     * @param none as provided in the constructor           
-    * @return void but exception sent if error
+    * @return Constants.Success when ok or Constants.ErrFiletoBig when file contains more field than currently supported by the code 
     */
     public int  OpenFile() throws IOException{
     	int retval= Constants.Fail; 

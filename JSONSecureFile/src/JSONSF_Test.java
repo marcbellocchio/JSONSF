@@ -388,13 +388,42 @@ firesult 	lg		is 208
 	}
 
 	
-	
+	public int  Test_JSONSF_FileAsByteBuffer(){
+		// here we suppose that we have a fiel in input, it can be clear or encrypted
+		// for clear use case, it means that the UI in charge of collecting the input of the user is not used
+		// the user generates the file using a text editor
+		
+		int result = Constants.Fail; 
+		// testing JSONSF_FileAsByteBuffer
+		JSONSF_FileAsByteBuffer fortest = new JSONSF_FileAsByteBuffer("/home/mbl/dev/workspace/JSONSecureFile/samplefile/sample_clear_MyBank.json");
+		
+		try{
+			result = fortest.OpenFile();
+			if (fortest.IsOpenedFileEncrypted()==false){
+				System.out.println("opened file is in clear " );
+				// now shall detect if we have to encrypt it
+			}
+			else{
+				System.out.println("opened file is in encrypted " );
+				// now shall detect method for decryption
+			}
+				
+						
+		}
+        catch(IOException ex) {
+        	System.out.println("Error testing Test_JSONSF_FileAsByteBuffer " );   
+            System.out.println( ex.getMessage() );
+            ex.printStackTrace();
+
+        }
+		return result;
+	}
 	
 	public void Test_JSONVersionFile (){
 		
     	StringBuffer strtestbuffer ;
     	try{
-    		JSONSF_ReadFile testreadfile = new JSONSF_ReadFile("/home/mbl/dev/workspace/JSONSecureFile/samplefile/sample.json");
+    		JSONSF_ReadJsonFile testreadfile = new JSONSF_ReadJsonFile("/home/mbl/dev/workspace/JSONSecureFile/samplefile/sample.json");
     		strtestbuffer = testreadfile.OpenTextFileLineByLine();
     		System.out.println("string buffer is " + strtestbuffer.toString() );
     		

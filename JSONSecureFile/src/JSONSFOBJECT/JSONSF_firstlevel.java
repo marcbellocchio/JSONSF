@@ -120,7 +120,7 @@ public class JSONSF_firstlevel {
 		// then shall be converted in json
 		// finally shall be written in the file
 		
-		JSONSF_WriteFile wFile = new JSONSF_WriteFile( FileName);
+		JSONSF_WriteJsonFile wFile = new JSONSF_WriteJsonFile( FileName);
 		try {
 			if (wFile!=null){
 				if (wFile.OpenFile()==Constants.Success ){
@@ -148,7 +148,7 @@ public class JSONSF_firstlevel {
 		int retval= Constants.Fail ; 
 		
 		try{
-			JSONSF_ReadFile filetoread  = new JSONSF_ReadFile (FileName);
+			JSONSF_ReadJsonFile filetoread  = new JSONSF_ReadJsonFile (FileName);
 			if ( (retval=filetoread.OpenFile()) == Constants.Success ){
 				while (filetoread.GetOneLine()!=false){
 					// each line is a TAG : VALUE

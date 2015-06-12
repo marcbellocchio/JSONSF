@@ -25,7 +25,7 @@ import org.json.simple.parser.*;
  * @author bellocch
  * @usage write in a json file the data entered by a user in a graphical interface
  */
-public class JSONSF_WriteFile {
+public class JSONSF_WriteJsonFile {
 	// private data
 	
 	// filename to open
@@ -39,7 +39,7 @@ public class JSONSF_WriteFile {
 	/**
 	 * 
 	 */
-	public JSONSF_WriteFile(String FileName) {
+	public JSONSF_WriteJsonFile(String FileName) {
 		// TODO Auto-generated constructor stub
 		PathAndFileName = FileName;
     	SupportedVersionDetected = false;

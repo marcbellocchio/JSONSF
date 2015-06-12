@@ -86,6 +86,9 @@ public interface Constants
 	/** default IV length in bytes */
     public static final int DefaulIVLengthInBytes = 16;
     
+    public static String EncFileExtension = "jencson";
+    
+    
 	/** ### ERROR management Constants ### */	    
     /**  */
     
