@@ -20,12 +20,13 @@ import JSONSFGLOBAL.Constants ;
 
 public class JSONSF_FileAsByteBuffer {
 
-	// filename to open
+	// full path to the file
 	private String PathAndFileName;
 	private byte[] tmpbuffer;
 	private Path path;
 	private FileSystem fileSystem;
 	private BasicFileAttributes fileattr;
+	// store name of the file
 	private String inputname;
 	private boolean EncryptedInputFileDetected ; 
 	
@@ -34,8 +35,8 @@ public class JSONSF_FileAsByteBuffer {
 	ByteArrayOutputStream bos;
 	
 	/**
-	 * the map contains a link to a file
-	 * such the targetted fiel shall be encrypted or decrypted
+	 * the map contains a link to a file in the data value
+	 * the targetted file shall be encrypted or decrypted
 	 * file is first opened, buffer on file is created
 	 * then buffer is either encrypted or decrypted
 	 * then file is created based on the buffer
@@ -80,7 +81,7 @@ public class JSONSF_FileAsByteBuffer {
     	int retval= Constants.Fail; 
  
         try {        
-        	 file = new File("PathAndFileName");
+        	 file = new File(PathAndFileName);
         	 if (file.exists() == true){
         		 fis = new FileInputStream(file);
         		 bos = new ByteArrayOutputStream();
@@ -96,8 +97,8 @@ public class JSONSF_FileAsByteBuffer {
         			 inputname = path.getFileName().toString();
         			 if (inputname.contains(Constants.EncFileExtension)==true){
         				 EncryptedInputFileDetected = true;
-                		 retval = Constants.Success;
         			 }	 
+            		 retval = Constants.Success;
         		 }// if(fileattr.isRegularFile()==true)     		         		 
         	 }// end         	 if (file.exists() == true){
 
@@ -161,10 +162,10 @@ public class JSONSF_FileAsByteBuffer {
         try {     
         	localpath = path.getParent();
         	if(EncryptedInputFileDetected==false){
-        		PathFileNameToCreate = localpath.toString() + inputname + Constants.EncFileExtension;
+        		PathFileNameToCreate = localpath.toString() + "\\" + inputname + Constants.EncFileExtension;
         	}
         	else{
-        		PathFileNameToCreate = localpath.toString() + inputname.replace(Constants.EncFileExtension,"");
+        		PathFileNameToCreate = localpath.toString()+ "\\" + inputname.replace(Constants.EncFileExtension,"");
         	}
             //create file
         	outFile = new File(PathFileNameToCreate);

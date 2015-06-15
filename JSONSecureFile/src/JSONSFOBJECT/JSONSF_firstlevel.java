@@ -10,6 +10,7 @@ import java.util.Map;
 
 import JSONSFFILE.*;
 
+import java.util.Formatter;
 //import java.io.BufferedReader;
 //import java.io.FileNotFoundException;
 //import java.io.FileReader;
@@ -202,6 +203,26 @@ public class JSONSF_firstlevel {
 	public int GetEncryptionMethod (){
 		return encMethod;	
 	}
+	
+	/**
+	* @brief ByteToStringBuffer
+	* @usage when a byte buffer contains character to be injected in a StringBuffer
+	* @param[in] byte [] bytebuffer, each byte is a character      
+	* @return StringBuffer
+	*/	
+	public StringBuffer ByteToStringBuffer (byte []bytebuffer ){
+		// if bytebuffer are [49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102]
+		// StringBuffer is 123456789abcdef
+		StringBuffer TestStr = new StringBuffer();
+		java.util.Formatter formatter = new java.util.Formatter(TestStr);
+		
+		for (int itr = 0; itr <bytebuffer.length;itr++){
+			formatter.format("%c",bytebuffer[itr]);			
+		}
+		formatter.close();
+		return TestStr;
+	}
+	
 	
 	/**
 	* @brief CheckEncryptionAlgorithm

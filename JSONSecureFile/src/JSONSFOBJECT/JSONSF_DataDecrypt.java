@@ -80,12 +80,29 @@ public class JSONSF_DataDecrypt extends JSONSF_firstlevel {
 	}
 	
 	/**
-	* @brief GetClearData
-	* @usage GetClearData after decryption
+	* @brief GetStrBufClearData, secure when data is a link to a file
+	* @usage GetStrBufClearData after decryption
+	* @param[in]    
+	* @return StringBuffer clear data from byte buffer coming from the decryption of the data
+	*/	
+	public StringBuffer GetStrBufClearData (){
+
+		//System.out.println("clear data from decryption is " + JSONSF_Crypto.encodeDec(ClearData) + "\n" );
+		//return ClearData.toString();
+		if (ClearData!=null)
+			return new StringBuffer (ClearData.toString());
+		else
+			return new StringBuffer (Constants.Empty);
+		
+	}	
+	
+	/**
+	* @brief GetStrClearData, secure when data is a link to a file
+	* @usage GetStrClearData after decryption to check if secure
 	* @param[in]    
 	* @return String clear data from byte buffer coming from the decryption of the data
 	*/	
-	public String GetClearData (){
+	public String GetStrClearData (){
 
 		//System.out.println("clear data from decryption is " + JSONSF_Crypto.encodeDec(ClearData) + "\n" );
 		//return ClearData.toString();

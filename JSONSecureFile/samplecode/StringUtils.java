@@ -86,7 +86,7 @@ public class StringUtils {
             if (((int) bytes[i] & 0xff) < 0x10) {
                 buf.append("0");
             }
-            buf.append(Long.toString((int) bytes[i] & 0xff, 16));
+            buf.append(Integer.toString((int) bytes[i] & 0xff, 16));
         }
         return buf.toString();
     }

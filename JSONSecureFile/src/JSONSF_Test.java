@@ -15,7 +15,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap; 
 import java.util.LinkedList; 
 import java.util.List; 
-import java.util.Map; 
+import java.util.Map;
+import java.util.Formatter;
 
  
 
@@ -118,6 +119,49 @@ public class JSONSF_Test {
 		}
 		return testres; 
 	}
+	
+	public int Test_StringByteChar (){
+		
+		int testres = Constants.Fail;
+		StringBuffer TestStr = new StringBuffer();
+		java.util.Formatter formatter = new java.util.Formatter(TestStr);
+		
+	     //char[] numbersAndLetters = ("0123456789abcdefghijklmnopqrstuvwxyz"
+	       //     + "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
+	 
+	    //char[] numbers = ("0123456789").toCharArray();
+		
+		//String reference = "123456789abcdef";
+		String reference = "{\"data\": \"value\", "
+				+ "\"hash\": \"1234567\" }";
+		byte[] plaindataref = reference.getBytes();
+
+		// string is 123456789abcdef
+		// bytes are [49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102]
+		
+		for (int itr = 0; itr <plaindataref.length;itr++){
+
+			formatter.format("%c",plaindataref[itr]);
+			//TestStr.append(plaindataref[itr]);
+			
+		}
+		
+		System.out.print("reference StringBuffer is  " + TestStr.toString() + "\n");
+		
+		System.out.print("reference string is  " + reference + "\n");
+		
+		System.out.print("reference string from bytes using tostring (wrong method) is  " + plaindataref.toString() + "\n");
+		System.out.print("reference string from bytes is  " + new String (plaindataref) + "\n");
+		
+
+		
+		formatter.close();
+		testres = Constants.Success;
+		return testres; 
+		
+		
+	}
+	
 	
 	public int Test_Serpent (){
 		
@@ -310,6 +354,9 @@ firesult 	lg		is 208
 			myDataDecryptObject.ValidateImport();
 		
 	}
+	
+	
+	
 	public int Test_ExportObjectToJSON (){
 		int result = Constants.Fail; 
 		// tested the 07 june @23.30 ok
@@ -352,8 +399,6 @@ firesult 	lg		is 208
 		
 		// encrypted data is in hex encoding 116c15a873086b81345139b54ecb3b3a6b80bb236f9064cec900e41a34ab8778
 		// encrypted data is in base64 encoding EWwVqHMIa4E0UTm1Tss7OmuAuyNvkGTOyQDkGjSrh3g=
-		
-		
 		//System.out.println("clear data is " + strbufdata + "\n" );
 		//System.out.println("clear data is " + strbufdata.toString() + "\n" );
 		//System.out.println("clear data is " + JSONSF_Crypto.encodeDec(strbufdata.toString().getBytes()) + "\n" );
@@ -372,13 +417,13 @@ firesult 	lg		is 208
 		if (myobjectfordecryption.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample_erika.json") == Constants.Success ){
 			myobjectfordecryption.ValidateImport();
 			myobjectfordecryption.DoDecryption();
-			myobjectfordecryption.GetClearData();
+			//myobjectfordecryption.GetStrClearData();
 			System.out.println("reference clear data is " + strbufdata + "\n" );
-			System.out.println("decrypted clear data is " + myobjectfordecryption.GetClearData() + "\n" );
+			System.out.println("decrypted clear data is " + myobjectfordecryption.GetStrClearData() + "\n" );
 		}
 			
 		
-		result = strbufdata.toString().compareTo(myobjectfordecryption.GetClearData());	
+		result = strbufdata.toString().compareTo(myobjectfordecryption.GetStrClearData());	
 		JSONSF_Crypto.Wipe (strbufpf,Constants.WIPEMETHOD);
 		JSONSF_Crypto.Wipe (strbufdata,Constants.WIPEMETHOD);	
 		
@@ -389,26 +434,40 @@ firesult 	lg		is 208
 
 	
 	public int  Test_JSONSF_FileAsByteBuffer(){
-		// here we suppose that we have a fiel in input, it can be clear or encrypted
-		// for clear use case, it means that the UI in charge of collecting the input of the user is not used
-		// the user generates the file using a text editor
+		// here we suppose that we have a file in input, it can be clear or encrypted
+		// for clear use case, it means that the UI in charge of collecting the input of the user detects a link in the data
+		// such link points to a file to be encrypted instead of having data encapsulated in a JSON object {}
 		
 		int result = Constants.Fail; 
-		// testing JSONSF_FileAsByteBuffer
-		JSONSF_FileAsByteBuffer fortest = new JSONSF_FileAsByteBuffer("/home/mbl/dev/workspace/JSONSecureFile/samplefile/sample_clear_MyBank.json");
-		
+
 		try{
-			result = fortest.OpenFile();
-			if (fortest.IsOpenedFileEncrypted()==false){
-				System.out.println("opened file is in clear " );
-				// now shall detect if we have to encrypt it
-			}
-			else{
-				System.out.println("opened file is in encrypted " );
-				// now shall detect method for decryption
-			}
-				
+	
+			// testing JSONSF_FileAsByteBuffer
+			//JSONSF_FileAsByteBuffer fortest = new JSONSF_FileAsByteBuffer("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample_clear_MyBank.json");
+			//JSONSF_FileAsByteBuffer fortest = new JSONSF_FileAsByteBuffer("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample_clear_MyBank.jsonjencson");
+			JSONSF_FileAsByteBuffer fortest = new JSONSF_FileAsByteBuffer("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample_clear_MyFile.json");
+			
+				result = fortest.OpenFile();
+				if(result == Constants.Success){							
+					if (fortest.IsOpenedFileEncrypted()==false){
+						System.out.println("opened file is in clear " );
+						// now we suppose that we encrypt the buffer, but we don't as we only want to test the class
+						// encryption shall be done by the caller of such class
+						// shall call encryption here
 						
+						fortest.CreateFile(fortest.GetFileBuffer());
+						
+					}
+					else{
+						System.out.println("opened file is in encrypted " );
+						//shall call decryption here
+						// now we suppose that we decrypt the buffer, but we don't as we only want to test the class
+						// decryption shall be done by the caller of such class
+						fortest.CreateFile(fortest.GetFileBuffer());
+						
+					}
+				}// end if(result == Constants.Success){
+
 		}
         catch(IOException ex) {
         	System.out.println("Error testing Test_JSONSF_FileAsByteBuffer " );   
@@ -435,5 +494,46 @@ firesult 	lg		is 208
         } 
 		
 	}
+	
+	/* to complete as use case not clear
+	 * 	public int  Test_JSONSF_FileAsByteBuffer(){
+		// here we suppose that we have a fiel in input, it can be clear or encrypted
+		// for clear use case, it means that the UI in charge of collecting the input of the user is not used
+		// the user generates the file using a text editor
+		
+		int result = Constants.Fail; 
+		// test if the file is a JSONSF file
+		JSONSF_firstlevel myobject = new JSONSF_firstlevel();
+		try{
+			if (myobject.ImportFromFile("C:/MBL_DATA/dev/workspace/git/jsonsecurefile/JSONSecureFile/samplefile/sample.json") == Constants.Success ){
+				result= myobject.ValidateImport();
+				if(result == Constants.Success){
+					// testing JSONSF_FileAsByteBuffer
+					JSONSF_FileAsByteBuffer fortest = new JSONSF_FileAsByteBuffer("/home/mbl/dev/workspace/JSONSecureFile/samplefile/sample_clear_MyBank.json");
+						result = fortest.OpenFile();
+						if(result == Constants.Success){							
+							if (fortest.IsOpenedFileEncrypted()==false){
+								System.out.println("opened file is in clear " );
+								// now shall detect if we have to encrypt it
+							}
+							else{
+								System.out.println("opened file is in encrypted " );
+								// now shall detect method for decryption
+							}
+						}// end if(result == Constants.Success){
+				}	// end if(result == Constants.Success){
+			}// end if (myobject.ImportFromFile("C:/MBL
+		}
+        catch(IOException ex) {
+        	System.out.println("Error testing Test_JSONSF_FileAsByteBuffer " );   
+            System.out.println( ex.getMessage() );
+            ex.printStackTrace();
+
+        }
+		return result;
+	}
+	 * 
+	 */
+	
 
 }

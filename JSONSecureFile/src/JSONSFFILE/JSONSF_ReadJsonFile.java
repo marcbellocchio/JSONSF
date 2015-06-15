@@ -35,7 +35,7 @@ public class JSONSF_ReadJsonFile {
 	// private data
 	// filename to open
 	private String PathAndFileName;
-	// a line read from String PathAndFileName
+	// a line read from String PathAndFileName, secure as data field shall be encrypted
 	private String ReadLine ; 
 	//
 	private FileReader FileForGetLine; 
@@ -121,8 +121,7 @@ public class JSONSF_ReadJsonFile {
                 	// make each line of the json file a json file of one line
     				//JSONSF_LineAnalyser jsonanalyser = new JSONSF_LineAnalyser (ReadLine);
     				ret = true;
-    				break;
-                		
+    				break;	
                 }//	if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==false)
     			
     		}//end while

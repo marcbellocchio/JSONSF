@@ -168,6 +168,12 @@ public class JSONSF_main {
 	                        	JSONSF_Test testclass = new JSONSF_Test(); 
 	                        	
 	                        	
+	                        	if(testclass.Test_JSONSF_FileAsByteBuffer()==Constants.Success)
+		                            System.out.println("Test_JSONSF_FileAsByteBuffer is ok");
+	                        	else
+	                        		System.out.println("Test_JSONSF_FileAsByteBuffer is ko, please review the code");
+	                        	
+	                        	
 	                            if(testclass.Test_ExportObjectToJSON()==Constants.Success)
 		                            System.out.println("Test_ExportObjectToJSON is ok");
 	                        	else
@@ -185,7 +191,7 @@ public class JSONSF_main {
 	                        	//testclass.Test_getWhirlpoolHash_lasydog(); 
 	                        	//testclass.Test_JSONParser();
 	                        	
-	                        	
+	                        	testclass.Test_StringByteChar ();
 	                        	
 	                        	if (testclass.Test_Twofish () == Constants.Success)
 		                            System.out.println("Test_Twofish is ok");
