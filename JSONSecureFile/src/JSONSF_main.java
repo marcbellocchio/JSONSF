@@ -1,5 +1,12 @@
 /**
  * main class to start code from command line
+ * idea is to use it in a mobiel or pc application
+ * http://www.pcsoft.fr/windevmobile/WM-Express.htm
+ * http://www.pcsoft.fr/windev/WD-Express.htm
+ * https://www.visualstudio.com/vs-2015-product-editions
+ * https://wiki.appcelerator.org/display/guides2/Appcelerator+Studio
+
+
    remote git
    https://github.com/marcbellocchio/JSONSF
  */
