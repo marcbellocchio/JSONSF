@@ -67,7 +67,7 @@ public class JSONSF_firstlevel {
 	public StringBuffer GetDataFromMapForExport (){
 		StringBuffer key=null;
 		StringBuffer value=null;
-		StringBuffer ret = null;
+		StringBuffer StrBufret = null;
 		
 		Iterator <StringBuffer>iterator = jsonfileheaderExport.keySet().iterator();
 		while(iterator.hasNext()){
@@ -76,20 +76,20 @@ public class JSONSF_firstlevel {
 			value = jsonfileheaderExport.get(key);
 			if( key.toString().equals(Constants.DATA) ){
 				// exit from while and return value
-				ret = value;
+				StrBufret = value;
 				break;
 			}		
 		}// end while(iterator.hasNext()){ 	
-		return ret;
+		return StrBufret;
 	}
 
 	/**
 	* @brief SetDataInMapForExport
-	* @usage all encrypted data in the jsonfileheaderExport
+	* @usage put input parameter in DATA value for being exported
 	* @param[in]         
 	* @return data when ok; null when data not found
 	*/	
-	public int SetDataInMapForExport (StringBuffer EncryptedData){
+	public int SetDataInMapForExport (StringBuffer InData){
 		int retval= Constants.Fail ;
 		StringBuffer key=null;
 		
@@ -99,7 +99,7 @@ public class JSONSF_firstlevel {
 			key   = (StringBuffer)iterator.next();
 			if( key.toString().equals(Constants.DATA) ){
 				// replace clear value with encrypted data
-				jsonfileheaderExport.replace(key, EncryptedData);
+				jsonfileheaderExport.replace(key, InData);
 				retval = Constants.Success;
 				break;
 			}		
@@ -137,6 +137,8 @@ public class JSONSF_firstlevel {
 		}	
 		return retval;
 	}
+	
+
 	
 	/**
 	* @brief ImportFromFile
@@ -228,16 +230,19 @@ public class JSONSF_firstlevel {
 	* @brief CheckEncryptionAlgorithm
 	* @usage check if the encryption algo is supported
 	* @param[in] int value     [out]  variable  encMethod is initialised
-	* @return success or fail when not supported
+	* @return success or ErrEncMethodNotSupported when not supported
 	*/	
 	public int CheckEncryptionAlgorithm (int value){
 		
-		int retval=Constants.Fail; 
+		int retval=Constants.ErrEncMethodNotSupported; 
 		switch (value){
-		    case 0: // none, clear data
-			case 1: // twofishcbc
-			case 2: // serpentcbc
-			case 3: // tfspcbc
+		    case Constants.ENC_NONE: // none, clear data
+			case Constants.ENC_TWOFISHCBC: // twofishcbc
+			case Constants.ENC_SERPENTCBC: // serpentcbc
+			case Constants.ENC_TWOFISHSERPENTCBC: // tfspcbc
+			case Constants.ENC_TWOFISHCBC256: // twofishcbc
+			case Constants.ENC_SERPENTCBC256: // serpentcbc
+			case Constants.ENC_TWOFISHSERPENTCBC256: // tfspcbc				
 				retval = Constants.Success;
 				encMethod= value;
 				break;

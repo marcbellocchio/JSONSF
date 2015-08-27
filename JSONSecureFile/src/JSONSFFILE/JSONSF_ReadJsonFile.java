@@ -25,17 +25,16 @@ import org.json.simple.parser.*;
 * @author mbl
 * @brief JSONSF_ReadFile class
 * @usage when a file needs to be opened to check its format, and get data 
-* @param na
-*            
+* @param na         
 * @return na
 */
 public class JSONSF_ReadJsonFile {
-	
-	
 	// private data
 	// filename to open
 	private String PathAndFileName;
 	// a line read from String PathAndFileName, secure as data field shall be encrypted
+	// secure means that even if string is not mutable, the data are still in clear somewhere in a text editor
+	// when reading an encrypted file the readline is storing secure data
 	private String ReadLine ; 
 	//
 	private FileReader FileForGetLine; 
@@ -44,16 +43,20 @@ public class JSONSF_ReadJsonFile {
 	
 	private Boolean SupportedVersionDetected;
 	
-	// constructor 
+	/**
+	* @author mbl
+	* @brief JSONSF_ReadJsonFile constructor
+	* @usage to open a json file 
+	* @param String FileName          
+	* @return na
+	*/ 
     public JSONSF_ReadJsonFile(String FileName)
     throws IOException
     {
     	PathAndFileName = FileName;
     	SupportedVersionDetected = false;
     	ReadLine= "";	
-    }	
- 
-   
+    }	 
     
     /**
     * @brief OpenFile
@@ -139,14 +142,14 @@ public class JSONSF_ReadJsonFile {
     
     /**
     * @brief OpenTextFileLineByLine
-    * @usage when a file shall be opened for decryption and reading
+    * @usage when a file shall be opened for reading, parsing
     * @param none as provided in the constructor           
     * @return StringBuffer containing each line of the opened file
     */
     public StringBuffer OpenTextFileLineByLine() throws IOException{
     	
     	StringBuffer strBuffer = new StringBuffer();
-        
+        int nbreadline = Constants.Version_all_MAXNumLines;
         try {
             // FileReader reads text files in the default encoding.
             FileReader fileReader = new FileReader(PathAndFileName);
@@ -154,38 +157,36 @@ public class JSONSF_ReadJsonFile {
             // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
+            
+           
             while((ReadLine = bufferedReader.readLine()) != null) {
-                System.out.println(ReadLine);
+                //System.out.println(ReadLine);
                 // skip markers of json file like { or  }
-                //if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==true) 
-                	//	|| (ReadLine.contentEquals(Constants.JSON_Marker_End)== true) ) {
-                	//continue ;
-                // file shall start by version	
-            	if ( SupportedVersionDetected == false){
-                    if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==false) 
-                	&& (ReadLine.contentEquals(Constants.JSON_Marker_End)== false) ) {
+                if ( (ReadLine.contentEquals(Constants.JSON_Marker_Begin)==true) 
+                		|| (ReadLine.contentEquals(Constants.JSON_Marker_End)== true) ) {
+                	continue ;
+                }
+                else{
+                	nbreadline--;
+                	strBuffer.append(ReadLine);
                     	
-                    	JSONSF_LineAnalyser jsonanalyser = new JSONSF_LineAnalyser (ReadLine);
-                    	if (jsonanalyser.CheckVersion() == true ){
-                    		// version detected, numberoflines known
-                    		SupportedVersionDetected = true;
-                    	}	// end if (jsonanalyser.CheckVersion() == true )
-                        // add each read line in a buffer
-                        strBuffer.append(ReadLine);
-                    }//	
+                	if ( SupportedVersionDetected == false){	                	
+	                	JSONSF_LineAnalyser jsonanalyser = new JSONSF_LineAnalyser (ReadLine);
+	                	if (jsonanalyser.CheckVersion() == true ){
+	                		// version detected, numberoflines known
+	                		SupportedVersionDetected = true;
+	                	}	// end if (jsonanalyser.CheckVersion() == true )	                                     	              	
+                	}// end if ( SupportedVersionDetected == false){               	
                 	
-            	}// end if ( VersionDetected == false){                	
-                
+                	if( (nbreadline == Constants.Zero) && (SupportedVersionDetected == false) ){
+                		// error in input file so delete buffer
+                    	// delete all the string buffer
+                    	strBuffer.delete(0, strBuffer.length());
+                	}
+                }// end else
             }// end while    
-
             // Always close files.
-            bufferedReader.close();  
-            // field version not present or version not supported
-            if(!SupportedVersionDetected){
-            	// delete all the string buffer
-            	strBuffer.delete(0, strBuffer.length());
-            }
-            	    
+            bufferedReader.close();           	    
         }// end try
         catch(FileNotFoundException ex) {
             System.out.println("Unable to open file '" + PathAndFileName + "'"); 
@@ -260,8 +261,6 @@ public class JSONSF_ReadJsonFile {
 		}
 		/**
 	    * @brief check if version of the file is supported
-	    * 
-		* 
 	    * @usage to check if the version in the json file is known and supported
 	    * @param none           
 	    * @return boolean, true when version is supported

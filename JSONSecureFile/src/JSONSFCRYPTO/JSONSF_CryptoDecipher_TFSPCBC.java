@@ -23,9 +23,10 @@ public class JSONSF_CryptoDecipher_TFSPCBC extends  JSONSF_CryptoDecipher_Serpen
 			byte [] DecipherOutTwoFish = null ;
 			byte [] DecipherOutFinal = null ;
 			
-			DecipherOutTwoFish = TwoFishCBC (key_bytes, iv_bytes, plainIn );
+			DecipherOutTwoFish = SerpentCBC (key_bytes, iv_bytes, plainIn );
 			if (DecipherOutTwoFish!=null){
-				DecipherOutFinal = SerpentCBC (key_bytes, iv_bytes, plainIn );
+				DecipherOutFinal = TwoFishCBC (key_bytes, iv_bytes, DecipherOutTwoFish );
+				  
 			}
 			//Wipe(key_bytes, Constants.WIPEMETHOD);				
 			return DecipherOutFinal;

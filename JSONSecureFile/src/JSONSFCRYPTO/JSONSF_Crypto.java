@@ -10,6 +10,8 @@ import gnu.crypto.util.Base64;
 import java.io.*;
 import java.util.Arrays;
 
+import JSONSFGLOBAL.Constants;
+
 /**
 * @author mbl
 * see manual for gnu crypto http://www.gnu.org/software/gnu-crypto/manual/index.html
@@ -22,21 +24,40 @@ import java.util.Arrays;
 public class JSONSF_Crypto {
 	
 	// block size for cipher are in bytes 
-	public static final int BitBlock128Bit = 16;
-	public static final int BitBlock256Bit = 32;
 	
-    public static final String SIZE_ERROR = "size is 128 or 192 or 256 bit";
+
+	
+    public static final String SIZE_ERROR = "size is 128 or 256 bit";
     public static final String UNKNOWNTYPE = "unknown type";
     public static final String NULL = "null";    
     
     public static final String IV = "IV";
     public static final String KEY = "KEY";
     public static final String DATA = "DATA";
+    
+    //@SuppressWarnings("unused")
+	private int KeyLength; 
 	
 	public JSONSF_Crypto(){
+		// default is 128 bit key
+		KeyLength =  Constants.DefaultKeyLengthInBytes; 
 		
 	}
 	
+	/**
+	 * @return the keyLength
+	 */
+	 public int getKeyLength() {
+		return KeyLength;
+	}
+
+	/**
+	 * @param keyLength the keyLength to set
+	 */
+	 public void setKeyLength(int keyLength) {
+		KeyLength = keyLength;
+	}
+
 	/**
 	 * check if param is not null and if length is ok
 	 * @param String type, bytes inparam
@@ -54,7 +75,7 @@ public class JSONSF_Crypto {
 			case IV:
 				if (inparam == null)
 					throw new IllegalArgumentException(IV + "is" + NULL);
-				if ( (inparam.length < BitBlock128Bit) || (inparam.length > BitBlock256Bit)){
+				if ( (inparam.length < Constants.DefaultKeyLengthInBytes) || (inparam.length > Constants.Bit256KeyLengthInBytes)){
 					throw new IllegalArgumentException(IV + "shall have a" + SIZE_ERROR);
 				}
 				valid=true;				
@@ -63,7 +84,7 @@ public class JSONSF_Crypto {
 			case KEY:
 				if (inparam == null)
 					throw new IllegalArgumentException(KEY + "is" + NULL);
-				if ( (inparam.length < BitBlock128Bit) || (inparam.length > BitBlock256Bit)){
+				if ( (inparam.length < Constants.DefaultKeyLengthInBytes) || (inparam.length > Constants.Bit256KeyLengthInBytes)){
 					throw new IllegalArgumentException(KEY + "shall have a" + SIZE_ERROR);
 				}
 				valid=true;				
@@ -271,18 +292,18 @@ public  static final void Wipe(StringBuffer Strbuftowipe, String method) {
 		byte [] data = new byte [Strbuftowipe.length()];
 		Arrays.fill( data, (byte) 0x45 );
 
-		JSONSF_Crypto CryptoHelp = new JSONSF_Crypto();
+		//JSONSF_Crypto CryptoHelp = new JSONSF_Crypto();
 
 		
 	  switch (method){
 	  	case "fast":  		
-	  		Strbuftowipe.replace(0, Strbuftowipe.length(), CryptoHelp.Base64Encode(data));
+	  		Strbuftowipe.replace(0, Strbuftowipe.length(), JSONSF_Crypto.Base64Encode(data));
 	  		break;
 	  	case "secure":
 	  		// rc6
 	  		break;
 	  	default: // fast
-	  		Strbuftowipe.replace(0, Strbuftowipe.length(), CryptoHelp.Base64Encode(data));
+	  		Strbuftowipe.replace(0, Strbuftowipe.length(), JSONSF_Crypto.Base64Encode(data));
 	  		break;
 	  }
 

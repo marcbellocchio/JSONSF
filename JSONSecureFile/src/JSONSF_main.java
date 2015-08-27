@@ -5,8 +5,14 @@
  * http://www.pcsoft.fr/windev/WD-Express.htm
  * https://www.visualstudio.com/vs-2015-product-editions
  * https://wiki.appcelerator.org/display/guides2/Appcelerator+Studio
-
-
+ * https://visualstudiomagazine.com/articles/2015/04/01/winjs-4-preview.aspx
+ * http://try.buildwinjs.com/pages/listview/options/default.html
+ * https://code.msdn.microsoft.com/windowsapps
+ * https://dev.windows.com/en-us/develop/winjs   (video tuto)
+ * http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Fsamples%2Fsamples.html
+ * 
+ * 
+ * 
    remote git
    https://github.com/marcbellocchio/JSONSF
  */
@@ -25,6 +31,10 @@ import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import JSONSFGLOBAL.Constants ;
+import JSONSTEST.JSONSF_GenericTest;
+import JSONSTEST.JSONSF_TestCrypto;
+import JSONSTEST.JSONSF_TestDataEncDec;
+import JSONSTEST.JSONSF_TestJsonFirstLevel;
 
 public class JSONSF_main {
 
@@ -69,7 +79,7 @@ public class JSONSF_main {
 	                
 	                String temp = args[0];
 	                	                	              
-	                if ((temp != null) && ((temp.length() == 2) || (temp.length() == 3)) &&
+	                if ((temp != null) && ((temp.length() >= 2) && (temp.length() <= 6)) &&
 	                (temp.startsWith("-") || temp.startsWith("--")))
 	                {
 
@@ -168,11 +178,13 @@ public class JSONSF_main {
 	                            System.out.println("\n" + timingBuilder.toString() + " - took " + ExecutionTimer._took(TimeUnit.SECONDS) + " seconds.");
 	                            break;
                            
-	                        case "-T":
-	                        case "--T":	
+	                        case "-TGE":
+	                        case "--TGE":	
 	                        	
-	                        	// hash test 
-	                        	JSONSF_Test testclass = new JSONSF_Test(); 
+	                        	//  
+	                        	JSONSF_GenericTest testclass = new JSONSF_GenericTest(); 
+	                        	
+	                        	testclass.Test_StringByteChar ();
 	                        	
 	                        	
 	                        	if(testclass.Test_JSONSF_FileAsByteBuffer()==Constants.Success)
@@ -186,31 +198,84 @@ public class JSONSF_main {
 	                        	else
 	                        		System.out.println("Test_ExportObjectToJSON is ko, please review the code");
 	                        	
+	                        case "-TED":
+	                        case "--TED":
 	                        	
-	                        	if(testclass.Test_DataEncryptionDecryptionFromObject()==Constants.Success)
-		                            System.out.println("Test_DataEncryptionDecryptionFromObject is ok");
+	                        	JSONSF_TestDataEncDec TestDataEncDec = new JSONSF_TestDataEncDec();
+	                        	
+	                        	if(TestDataEncDec.Test_DataEncryptionFromObject()==Constants.Success)
+		                            System.out.println("Test_DataEncryptionFromObject is ok");
 	                        	else
-	                        		System.out.println("Test_DataEncryptionDecryptionFromObject is ko, please review the code");
+	                        		System.out.println("Test_DataEncryptionFromObject is ko, please review the code");
+	                        	                      	
+	                        	 
 	                        	
-	                        	testclass.Test_JSONFirstLevel();
+	                        	if(TestDataEncDec.Test_DataDecryptionFromObject()==Constants.Success)
+		                            System.out.println("Test_DataDecryptionFromObject is ok");
+	                        	else
+	                        		System.out.println("Test_DataDecryptionFromObject is ko, please review the code");
+	                        	
+	                        	
+	                        	//JSONSF_TestDataEncDec TestDataEncDec = new JSONSF_TestDataEncDec();
+	                        	
+	                        	if(TestDataEncDec.Test_DataEncryptionValueSetAfterMapCreationFromObject()==Constants.Success)
+		                            System.out.println("Test_DataEncryptionValueSetAfterMapCreationFromObject is ok");
+	                        	else
+	                        		System.out.println("Test_DataEncryptionValueSetAfterMapCreationFromObject is ko, please review the code");
+	                        	                      	
+	                        	 
+	                        	
+	                        	if(TestDataEncDec.Test_DataDecryptionValueSetAfterMapCreationFromObject()==Constants.Success)
+		                            System.out.println("Test_DataDecryptionValueSetAfterMapCreationFromObject is ok");
+	                        	else
+	                        		System.out.println("Test_DataDecryptionValueSetAfterMapCreationFromObject is ko, please review the code");
+	                        	
+	                        	
+	                        	if(TestDataEncDec.Test_DataEncryptionEncMethodTwoFishCBC256FromObject()==Constants.Success)
+		                            System.out.println("Test_DataEncryptionEncMethodTwoFishCBC256FromObject is ok");
+	                        	else
+	                        		System.out.println("Test_DataEncryptionEncMethodTwoFishCBC256FromObject is ko, please review the code");
+	                        	                      	
+	                        	 
+	                        	
+	                        	if(TestDataEncDec.Test_DataDecryptionEncMethodTwoFishCBC256FromObject()==Constants.Success)
+		                            System.out.println("Test_DataDecryptionEncMethodTwoFishCBC256FromObject is ok");
+	                        	else
+	                        		System.out.println("Test_DataDecryptionEncMethodTwoFishCBC256FromObject is ko, please review the code");
+	                        	
+	                        	
+	                        	
+	                        	break;
+	                        	
+	                        case "-TFL":
+	                        case "--TFL":           	
+	                        		                        	
+	                        	JSONSF_TestJsonFirstLevel TestJsonFirstLevel = new JSONSF_TestJsonFirstLevel(); 
+	                        
+	                        	TestJsonFirstLevel.Test_JSONFirstLevel();
 	                        	                        	
 	                        	
 	                        	//testclass.Test_getWhirlpoolHash_lasydog(); 
 	                        	//testclass.Test_JSONParser();
+	                        	break;
 	                        	
-	                        	testclass.Test_StringByteChar ();
+	                        case "-TCR":
+	                        case "--TCR":  
 	                        	
-	                        	if (testclass.Test_Twofish () == Constants.Success)
+	                        	JSONSF_TestCrypto TestCryptoAlgo = new JSONSF_TestCrypto(); 
+		                        
+	                        	
+	                        	if (TestCryptoAlgo.Test_Twofish () == Constants.Success)
 		                            System.out.println("Test_Twofish is ok");
 	                        	else
 	                        		System.out.println("Test_Twofish is ko, please review the code");
 	                        		
-	                        	if (testclass.Test_Serpent () == Constants.Success)
+	                        	if (TestCryptoAlgo.Test_Serpent () == Constants.Success)
 		                            System.out.println("Test_Serpent is ok");
 	                        	else
 	                        		System.out.println("Test_Serpent is ko, please review the code");
 	                        			                        	 
-	                        	if (testclass.Test_TFSPCBC () == Constants.Success)
+	                        	if (TestCryptoAlgo.Test_TFSPCBC () == Constants.Success)
 		                            System.out.println("Test_TFSPCBC is ok");
 	                        	else
 	                        		System.out.println("Test_TFSPCBC is ko, please review the code");

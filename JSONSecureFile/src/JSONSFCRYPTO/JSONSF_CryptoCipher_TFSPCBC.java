@@ -17,6 +17,7 @@ public class JSONSF_CryptoCipher_TFSPCBC extends  JSONSF_CryptoCipher_SerpentCBC
 	 */
 	public JSONSF_CryptoCipher_TFSPCBC() {
 		// TODO Auto-generated constructor stub
+		
 	}
 	
 	   /**
@@ -36,7 +37,7 @@ public class JSONSF_CryptoCipher_TFSPCBC extends  JSONSF_CryptoCipher_SerpentCBC
 			
 			cipherOutTwoFish = TwoFishCBC (key_bytes, iv_bytes, plainIn );
 			if (cipherOutTwoFish!=null){
-				cipherOutFinal = SerpentCBC (key_bytes, iv_bytes, plainIn );
+				cipherOutFinal = SerpentCBC (key_bytes, iv_bytes, cipherOutTwoFish );
 			}		
 			//Wipe(key_bytes, Constants.WIPEMETHOD);	
 			return cipherOutFinal;

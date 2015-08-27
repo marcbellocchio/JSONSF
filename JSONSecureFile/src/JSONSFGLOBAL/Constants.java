@@ -31,6 +31,8 @@ public interface Constants
     /** the data field of the json file */
 	public static final  String DATA = "data";	
 	
+	public static final  String FileTypeList =  " json"  + " txt" + "misc" ;
+	
     /** MAX size of the json file for all version in bytes*/
     public static final int Version_all_MAXSIZE = 1000000;	
     
@@ -63,16 +65,19 @@ public interface Constants
     public static final String TWOFISHCBC = "twofishcbc";
     
     public static final int ENC_TWOFISHCBC = 1;
+    public static final int ENC_TWOFISHCBC256 = 4;
         
     public static final String SERPENTCBC = "serpentcbc";
     
     public static final int ENC_SERPENTCBC = 2;
+    public static final int ENC_SERPENTCBC256 = 5;
     
     public static final String TWOFISHSERPENTCBC = "tfspcbc";
     
     public static final int ENC_TWOFISHSERPENTCBC = 3;    
+    public static final int ENC_TWOFISHSERPENTCBC256 = 6;  
     
-    public static final  String EncryptionMethodList =  " twofishcbc"  + " serpentcbc" + " tfspcbc" ;
+    public static final  String EncryptionMethodList =  " twofishcbc"  + " serpentcbc" + " tfspcbc" + " twofishcbc256"  + " serpentcbc256" + " tfspcbc256" ;
     
     // can be fast or secure
     public static final String WIPEMETHOD = "fast";
@@ -82,6 +87,12 @@ public interface Constants
  
 	/** default key length in bytes */
     public static final int DefaultKeyLengthInBytes = 16;
+    
+	/** default key length in bytes */
+    public static final int Bit256KeyLengthInBytes = 32;
+    
+	/** default IV length in bytes */
+    public static final int DefaulBlockDataSizeInBytes = 16;
    
 	/** default IV length in bytes */
     public static final int DefaulIVLengthInBytes = 16;
@@ -105,19 +116,19 @@ public interface Constants
     public static final int Fail = 12345678;
     
     /** file to big */
-    public static final int ErrFiletoBig = 20;
+    public static final int ErrFiletoBig = 10020;
     
     /** too many line in json file  */
-    public static final int ErrToMuchLline = 21;
+    public static final int ErrToMuchLline = 10021;
     
     /** version not supported  */
-    public static final int ErrVersionNotPresent = 22; 
+    public static final int ErrVersionNotPresent = 10022; 
     
     /** version not supported  */
-    public static final int ErrVersionNotSupported = 23;  
+    public static final int ErrVersionNotSupported = 10023;  
     
     /** encryption method not supported  */
-    public static final int ErrEncMethodNotSupported = 24;   
+    public static final int ErrEncMethodNotSupported = 10024;   
     
 }
 

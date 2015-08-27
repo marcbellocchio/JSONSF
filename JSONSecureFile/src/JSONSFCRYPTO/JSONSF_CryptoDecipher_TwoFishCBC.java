@@ -12,6 +12,8 @@ import java.security.InvalidKeyException;
 import java.util.HashMap;
 import java.util.Map;
 
+import JSONSFGLOBAL.Constants;
+
 /**
  * @author bellocch
  *
@@ -51,12 +53,12 @@ public class JSONSF_CryptoDecipher_TwoFishCBC extends JSONSF_Crypto{
 		if (IsAllParamValid == true){
 		
 	        IPad padding = PadFactory.getInstance("PKCS7");
-	        padding.init(BitBlock128Bit);
-			IMode mode = ModeFactory.getInstance("CBC","Twofish", BitBlock128Bit);
+	        padding.init(Constants.DefaulBlockDataSizeInBytes);
+			IMode mode = ModeFactory.getInstance("CBC","Twofish", Constants.DefaulBlockDataSizeInBytes);
 			Map<String, Object> attributes = new HashMap<String, Object>();
 			// These attributes are defined in gnu.crypto.cipher.IBlockCipher.
 			attributes.put(IMode.KEY_MATERIAL, key_bytes);
-			attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(BitBlock128Bit));
+			attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(Constants.DefaulBlockDataSizeInBytes));
 			// These attributes are defined in IMode.
 			attributes.put(IMode.STATE, new Integer(IMode.DECRYPTION));
 			attributes.put(IMode.IV, iv_bytes);
@@ -92,7 +94,7 @@ public class JSONSF_CryptoDecipher_TwoFishCBC extends JSONSF_Crypto{
     * TwoFish CBC 
     * <p>
     * gnu crypto java lib used
-    * block size 128 bit, key size 128, 192, 256
+    * block size 128 bit, key size 128,  256
     * @param bytes
     *            key, IV and plain data are string
     *            key and IV shall be hex encoded i.e

@@ -12,6 +12,8 @@ import java.security.InvalidKeyException;
 import java.util.HashMap;
 import java.util.Map;
 
+import JSONSFGLOBAL.Constants;
+
 /**
  * @author mbl
  *
@@ -48,12 +50,12 @@ public class JSONSF_CryptoDecipher_SerpentCBC extends JSONSF_CryptoDecipher_TwoF
 		if (IsAllParamValid == true){
 		
 	        IPad padding = PadFactory.getInstance("PKCS7");
-	        padding.init(BitBlock128Bit);
-			IMode mode = ModeFactory.getInstance("CBC","Serpent", BitBlock128Bit);
+	        padding.init(Constants.DefaulBlockDataSizeInBytes);
+			IMode mode = ModeFactory.getInstance("CBC","Serpent", Constants.DefaulBlockDataSizeInBytes);
 			Map<String, Object> attributes = new HashMap<String, Object>();
 			// These attributes are defined in gnu.crypto.cipher.IBlockCipher.
 			attributes.put(IMode.KEY_MATERIAL, key_bytes);
-			attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(BitBlock128Bit));
+			attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(Constants.DefaulBlockDataSizeInBytes));
 			// These attributes are defined in IMode.
 			attributes.put(IMode.STATE, new Integer(IMode.DECRYPTION));
 			attributes.put(IMode.IV, iv_bytes);

@@ -9,10 +9,13 @@ import java.security.InvalidKeyException;
 import java.util.HashMap;
 import java.util.Map;
 
+import JSONSFGLOBAL.Constants;
+
 public class JSONSF_CryptoCipher_SerpentCBC extends JSONSF_CryptoCipher_TwoFishCBC{
 
 	public JSONSF_CryptoCipher_SerpentCBC() {
 		// TODO Auto-generated constructor stub
+		
 	}
 
 
@@ -20,7 +23,7 @@ public class JSONSF_CryptoCipher_SerpentCBC extends JSONSF_CryptoCipher_TwoFishC
     * Serpent CBC 
     * <p>
     * gnu crypto java lib used
-    * block size 128 bit, key size 128, 192, 256
+    * block size 128 bit, key size 128,  256
     * @param bytes
     *            key, IV and plain data are byte buffer
     * @return encrypted byte buffer pad is PKCS7
@@ -36,12 +39,12 @@ public class JSONSF_CryptoCipher_SerpentCBC extends JSONSF_CryptoCipher_TwoFishC
 		if (IsAllParamValid == true){
 		
 	        IPad padding = PadFactory.getInstance("PKCS7");
-	        padding.init(BitBlock128Bit);
+	        padding.init(Constants.DefaulBlockDataSizeInBytes);
 	        byte[] pt1 = plainIn;
 	        byte[] pad = padding.pad(pt1, 0, pt1.length);
 	        byte[] finalplain = null;
 	        // 
-	        if (pad.length == BitBlock128Bit) {
+	        if (pad.length == Constants.DefaulBlockDataSizeInBytes) {
 	        	// one block no pad
 	        	finalplain = new byte[pt1.length];
 	            System.arraycopy(pt1, 0, finalplain, 0, pt1.length);
@@ -52,11 +55,11 @@ public class JSONSF_CryptoCipher_SerpentCBC extends JSONSF_CryptoCipher_TwoFishC
 	            System.arraycopy(pad, 0, finalplain, pt1.length, pad.length);
 	        }
 	        
-			IMode mode = ModeFactory.getInstance("CBC","Serpent", BitBlock128Bit);
+			IMode mode = ModeFactory.getInstance("CBC","Serpent", Constants.DefaulBlockDataSizeInBytes);
 			Map<String, Object> attributes = new HashMap<String, Object>();
 			// These attributes are defined in gnu.crypto.cipher.IBlockCipher.
 			attributes.put(IMode.KEY_MATERIAL, key_bytes);
-			attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(BitBlock128Bit));
+			attributes.put(IMode.CIPHER_BLOCK_SIZE, new Integer(Constants.DefaulBlockDataSizeInBytes));
 			// These attributes are defined in IMode.
 			attributes.put(IMode.STATE, new Integer(IMode.ENCRYPTION));
 			attributes.put(IMode.IV, iv_bytes);

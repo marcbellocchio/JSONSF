@@ -43,7 +43,7 @@ public class JSONSF_FileAsByteBuffer {
 	* @author mbl
 	* @brief JSONSF_FileAsByteBuffer class
 	* @usage when a file content needs to be decrypted or encrypted, get a byte buffer on a file
-	* it will not chnage the source file, generates a second file in clear or encrypted
+	* it will not change the source file, generates a second file in clear or encrypted
 	* @param String FileName          
 	* @return na
 	*/
@@ -63,7 +63,7 @@ public class JSONSF_FileAsByteBuffer {
 
     /**
     * @brief IsOpenedFileEncrypted
-    * @usage 
+    * @usage determine is the file
     * @param           
     * @return EncryptedInputFileDetected
     */    
@@ -72,7 +72,7 @@ public class JSONSF_FileAsByteBuffer {
 	}
 	
     /**
-    * @brief OpenFile
+    * @brief OpenFile and detect if the file is encrypted or in clear based on file extension
     * @usage when a file shall be opened to get a stream made of byte array
     * @param none as provided in the constructor           
     * @return Constants.Success when ok or Constants.Fail when file doesn't exist
@@ -114,7 +114,7 @@ public class JSONSF_FileAsByteBuffer {
             ex.printStackTrace();
         }
 
-   	 		return retval;
+   	 	return retval;
         
     }
 	
@@ -141,27 +141,27 @@ public class JSONSF_FileAsByteBuffer {
     }
 	
     /**
-    * @brief CreateFile generates a file using the buffer bytestowrite
-    * @usage when GetFileBuffer has been used and crypto operation has been done on a buffer
-    * @param byte [] bytestowrite          
+    * @brief CreateFile generates a file using the buffer bytestowrite in parameter
+    * @usage when GetFileBuffer has been used and crypto operation (encrypt/decrypt) has been done on a buffer
+    * it will add the jencson extension to the file when fencrypted= true
+    * @param byte [] bytestowrite  
+    * @param boolean fencrypted , true define if the file to create has been encrypted       
     * @return true when file created, false otherwise
     */    
-	public boolean  CreateFile(byte [] bytestowrite) {
+	public boolean  CreateFile(byte [] bytestowrite, boolean fencrypted ) {
 
     	Path localpath=null;
     	String PathFileNameToCreate=null;
     	File outFile=null;
     	FileOutputStream fos=null;
     	boolean filecreated=false;
-    	// get parent of input file
-    	// add Constants.EncFileExtension  if clear file otherwise removed it
-    	// create file using created path
     	
-    	// TODO compare bytestowrite and bos.toByteArray() when equals nothing has been done of the buffer !
+    	// TODO compare bytestowrite and bos.toByteArray() when equals nothing has been done of the buffer , may take time!
     	
         try {     
         	localpath = path.getParent();
-        	if(EncryptedInputFileDetected==false){
+        	if(fencrypted == true){
+        		// add encrypted extension
         		PathFileNameToCreate = localpath.toString() + "\\" + inputname + Constants.EncFileExtension;
         	}
         	else{

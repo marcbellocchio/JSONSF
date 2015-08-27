@@ -7,7 +7,7 @@ import JSONSFGLOBAL.Constants;
 import gnu.crypto.hash.HashFactory;
 
 
-public class JSONSF_CryptoGenerateKeys {
+public class JSONSF_CryptoGenerateKeys  {
 
 	private byte [] Key1 ;
 	private byte [] Key2 ;
@@ -19,7 +19,7 @@ public class JSONSF_CryptoGenerateKeys {
 	
 	/**
 	* @brief GetKey1
-	* @usage getkey
+	* @usage getkey1 based on length parameter
 	* @param[in] int length, requested key length in bytes   
 	* @return byte buffer of requested length
 	*/	
@@ -34,9 +34,9 @@ public class JSONSF_CryptoGenerateKeys {
 	
 	/**
 	* @brief GetKey2
-	* @usage getkey
+	* @usage getkey based on length parameter
 	* @param[in] int length, requested key length in bytes   
-	* @return byte buffer of requested length
+	* @return byte buffer of requested length or default key length is provided length bigger than Constants.MaxKeyLengthInBytes
 	*/	
 	public byte [] GetKey2 (int  length){
 		//Arrays.copyOf(Key1, length);
@@ -51,7 +51,7 @@ public class JSONSF_CryptoGenerateKeys {
 	* @brief GetIV
 	* @usage GetIV
 	* @param[in] int length, requested IV length in bytes   
-	* @return byte buffer of requested length
+	* @return byte buffer of requested length or default key length is provided length bigger than Constants.MaxKeyLengthInBytes
 	*/	
 	public byte [] GetIV (int  length){
 
